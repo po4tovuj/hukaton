@@ -19,11 +19,11 @@ export const db = firebase.database().ref();
 export const usersDbRef = db.child('users');
 export const habitsDbRef = db.child('habits');
 export const auth = firebase.auth();
-// категория придет из формы после создания таска
-const category = '';
-
-const userId = auth.currentUser.uid;
-
-habitsDbRef.child(`${category}/${userId}`).push({
-    text: '11111'
-});
+// // категория придет из формы после создания таска
+// const category = '';
+//
+// const userId = auth.currentUser.uid;
+//
+// habitsDbRef.child(`${category}/${userId}`).push({
+//     text: '11111'
+// });

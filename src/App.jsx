@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './App.css';
 import Header from './components/Header';
 import AuthForm from './components/AuthForm';
 import { Route, Switch } from 'react-router-dom';
