@@ -1,27 +1,15 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import styles from './style.css';
 
+import React, { Component } from 'react';
+import Logo from '../Logo';
+import styles from './styles.css';
 
-const Header = () => (
-  <header>
-    <nav>
-      <div>
-        <a href="/" className={styles}>
-          <img alt="" />
-        </a>
-        <ul id="nav-mobile" className={styles}>
-          <li>
-            <NavLink exact to="/" className={styles} activeClassName={styles} >
-              Habits
-            </NavLink>
-            <button> Logout </button>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-);
+export default class Auth extends Component {
+    render () {
+        return (
+            <header className={styles.header}>
+            <Logo />
+            </header>
+        )
+    }
+}
 
-
-export default Header;
