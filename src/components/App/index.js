@@ -5,6 +5,7 @@ import {
   Redirect
 } from 'react-router-dom';
 
+import styles from './index.css';
 import Navigation from '../Navigation';
 import LandingPage from '../Landing';
 import SignUpPage from '../SignUp';
@@ -16,11 +17,14 @@ import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants/routes';
 
 import './index.css';
+import Sidebar from "../Sidebar";
+import Habit from "../Habit";
 
 const App = () =>
   <Router>
     <div className="app">
       <Navigation />
+
 
       <hr/>
 
@@ -32,7 +36,10 @@ const App = () =>
       <Route exact path={routes.ACCOUNT} component={() => <AccountPage />} />
       {/* <Redirect to={routes.SIGN_IN} /> */}
       <hr/>
-
+        <div className={styles.habit}>
+            <Sidebar />
+            <Habit />
+        </div>
       {/* <span>Found in <a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></span> | <span>Star the <a href="https://github.com/rwieruch/react-firebase-authentication">Repository</a></span> | <span>Receive a <a href="https://www.getrevue.co/profile/rwieruch">Developer's Newsletter</a></span> */}
     </div>
   </Router>

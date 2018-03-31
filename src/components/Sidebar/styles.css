@@ -1,0 +1,44 @@
+.counter {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #3f51b5;
+    color: #ffffff;
+    line-height: 30px;
+    text-align: center;
+}
+
+.category__wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.category {
+    list-style: none;
+    width: 100%;
+    min-height: 40px;
+    margin: 0;
+    padding: 0;
+    background-color: #c5c9e9;
+}
+
+.category__item {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    min-height: 50px;
+    margin-left: 20px;
+    padding: 0 20px;
+
+}
+
+
+.sidebar {
+    width: 20%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+
+}
