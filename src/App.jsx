@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './App.css';
 import Header from './components/Header';
+import NewHabits from './components/NewHabits';
 import { Route, Switch } from 'react-router-dom';
 
 class App extends Component {
@@ -15,6 +16,7 @@ class App extends Component {
           <Route path="/watch-list" component={WatchList} /> */}
           <Route render={() => <h2>404 not found!!! sorry</h2>} />
         </Switch>
+        <NewHabits />
       </div>
     );
   }
