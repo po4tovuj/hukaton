@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
 import { db } from '../../firebase';
-
+import Sidebar from "../Sidebar";
+import Habit from "../Habit";
+import styles from './styles.css';
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +22,11 @@ class HomePage extends Component {
 
   render() {
     const { users } = this.state;
-
     return (
-      <div>
-        <h1>Home</h1>
-        <p>The Home Page is accessible by every signed in user.</p>
-        <p> тут будет компонент сайдбара и лист привычек </p>
-        {/* { !!users && <UserList users={users} /> } */}
-      </div>
+        <div className={styles.habit}>
+            <Sidebar />
+            <Habit />
+        </div>
     );
   }
 }
