@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import styles from './App.css';
 import Header from './components/Header';
 import { Route, Switch } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
 
 class App extends Component {
   render() {
     return (
       <div>
         <Header />
+        <Sidebar />
         <Switch>
           <Route exact path="/" render={() => <div> Habits </div>} />
           {/* <Route path="/home" component={Home} />
