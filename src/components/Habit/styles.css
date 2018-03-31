@@ -1,0 +1,55 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #757575;
+}
+
+.number {
+    width: 5%;
+    text-align: right;
+}
+
+.title {
+    width: 40%;
+    padding-left: 20px;
+
+}
+
+.sign__todo {
+    width: 8%;
+    background: url('../../images/icon-17_gray.svg') no-repeat 50% 50%;
+    background-size: 30%;
+}
+
+.sign__todo__done{
+     width: 8%;
+     background: url('../../images/icon-17.svg') no-repeat 50% 50%;
+     background-size: 30%;
+}
+
+.sign__not_done{
+    width: 8%;
+    background: url('../../images/icon-19.svg') no-repeat 50% 50%;
+    background-size: 25%;
+}
+
+.sign__none{
+    width: 8%;
+    background: url('../../images/icon-18.svg') no-repeat 50% 50%;
+    background-size: 30%;
+}
+
+.basket {
+    width: 10%;
+    background: url('../../images/icon-13.svg') no-repeat 50% 50%;
+    background-size: 15%;
+}
+
+.basket__orange {
+    width: 10%;
+    background: url('../../images/icon-13_orange.svg') no-repeat 50% 50%;
+    background-size: 15%;
+}
