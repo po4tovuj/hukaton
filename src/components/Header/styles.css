@@ -1,0 +1,11 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #3f51b5;
+    padding: 10px 40px;
+    min-height: 50px;
+}
+.SignIn {
+    text-decoration: none;
+}
