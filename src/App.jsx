@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import styles from './App.css';
 import Header from './components/Header';
+import Habits from './components/Habits';
 import { Route, Switch } from 'react-router-dom';
+import styles from './App.css';
 
 class App extends Component {
   render() {
@@ -9,11 +10,11 @@ class App extends Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path="/" render={() => <div> Habits </div>} />
+          <Route exact path="/" component={<Habits />} />
           {/* <Route path="/home" component={Home} />
           <Route path="/about" component={About} />
           <Route path="/watch-list" component={WatchList} /> */}
-          <Route render={() => <h2>404 not found!!! sorry</h2>} />
+          {/* <Route render={() => <h2>404 not found!!! sorry</h2>} /> */}
         </Switch>
       </div>
     );
