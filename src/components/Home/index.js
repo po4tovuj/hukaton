@@ -1,45 +1,121 @@
 import React, { Component } from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
-import { db } from '../../firebase';
+import { onceGetUsers, auth, db } from '../../firebase';
 import Sidebar from "../Sidebar";
 import NewHabit from '../NewHabit';
 import List from '../List';
 import styles from './styles.css';
-import habitsData from './db.json';
-import { Route } from 'react-router-dom';
+import DateField from "../DateField";
+import CreateHabit from "../CreateHabit";
+
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: {},
-            userHabbits: []
+            showModal: false,
+            users: {}
         };
+
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
     componentDidMount() {
-        db.onceGetUsers().then(snapshot => {
-            this.setState(() => ({ user: snapshot.val() }));
-        }
+        onceGetUsers().then(snapshot =>
+            this.setState(() => ({users: snapshot.val()}))
         );
-        const userHabbits = Object.values(habitsData.habits.userID1);
-        console.log('userHabbits: ', userHabbits);
+    };
+
+    handleOpenModal () {
+      this.setState({ showModal: true });
+    }
+
+    handleCloseModal () {
+      this.setState({ showModal: false });
     }
 
     render() {
-        const { user } = this.state;
-        const { match } = this.props;
-        const userId = Object.values(habitsData.habits.userID1);
 
+        console.log(auth.currentUser.uid);
+        let userid = auth.currentUser.uid;
+        let category = "sex";
+// let title = "jdbfv hbedvbe";
+// writeNewPost(userid,  title, category);
+//         function writeNewPost(userid,  title, category) {
+//           let habits = db.ref().child("habits");
+//           var postData = {
+//             title: title,
+//             category: category,
+//             startTime: "дата начала действия привычки",
+//                   duration: {
+//                     "1": false,
+//                     "2": false,
+//                     "3": false,
+//                     "4": false,
+//                     "5": false,
+//                     "6": false,
+//                     "0": false
+//                   },
+//           };
+//
+//           // Get a key for a new Post.
+//           var newPostKey = db.ref().child(habits).push().key;
+//
+//           // Write the new post's data simultaneously in the posts list and the user's post list.
+//           var updates = {};
+//           updates['/habits/' + newPostKey] = postData;
+//           // updates['/user-posts/' + userid + '/' + newPostKey] = postData;
+//
+//           return db.ref().update(updates);
+//         };
+
+
+
+
+
+
+
+
+        function addHabits(userid, habit, category) {
+          db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
+
+        }
+
+        addHabits("nezGSxsSuoga24lflPtjwmVXzqw1", {
+
+
+          title: "что то сделать",
+          category: category,
+          startTime: "дата начала действия привычки",
+                duration: {
+                  "1": false,
+                  "2": false,
+                  "3": false,
+                  "4": false,
+                  "5": false,
+                  "6": false,
+                  "0": false
+                },
+        }
+        );
+
+
+
+
+
+        const {users, showModal} = this.state;
         return (
             <div className={styles.habit}>
                 <Sidebar {...this.props} userId={userId} habitsData={habitsData}/>
 
                 <div className={styles.wrapper}>
-                    <NewHabit />
-                    <Route path={`${match.url}/:category`} render={(props) => <List {...props} habits={userId} />} />
+                    <NewHabit handleOpenModal={this.handleOpenModal} />
+                    <DateField/>
+                    <Habit/>
+                    <CreateHabit handleCloseModal={this.handleCloseModal} showModal={showModal} />
                 </div>
             </div>
         );

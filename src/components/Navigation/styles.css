@@ -1,0 +1,11 @@
+.navlist {
+    list-style-type: none;
+    display: block;
+}
+.ul {
+    display: flex;
+    width: 200px;
+    /*flex-direction: row-reverse;*/
+    align-items: center;
+    justify-content: space-around;
+}
