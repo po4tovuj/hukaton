@@ -4,6 +4,7 @@ import withAuthorization from '../Session/withAuthorization';
 import {db} from '../../firebase';
 import Sidebar from "../Sidebar";
 import Habit from "../Habit";
+import NewHabit from "../NewHabits";
 import styles from './styles.css';
 import DateField from "../DateField";
 
@@ -28,6 +29,7 @@ class HomePage extends Component {
             <div className={styles.habit}>
                 <Sidebar/>
                 <div className={styles.wrapper}>
+                    <NewHabit />
                     <DateField/>
                     <Habit/>
                 </div>
