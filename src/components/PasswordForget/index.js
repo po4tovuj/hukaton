@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 
 import { auth } from '../../firebase';
 import * as routes from '../../constants/routes';
+import styles from '../Account/styles.css';
+import styles2 from '../../styles/theme.css';
+
+
 
 const PasswordForgetPage = () =>
   <div>
@@ -38,7 +42,7 @@ class PasswordForgetForm extends Component {
       });
 
     event.preventDefault();
-  }
+  };
 
   render() {
     const {
@@ -49,8 +53,8 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <form className={styles.accountForm} onSubmit={this.onSubmit}>
+        <input className={styles2.input}
           value={this.state.email}
           onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
           type="text"

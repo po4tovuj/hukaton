@@ -4,15 +4,18 @@ import AuthUserContext from '../Session/AuthUserContext';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
+import styles from './styles.css';
 
 const AccountPage = () =>
   <AuthUserContext.Consumer>
-    {authUser =>
-      <div>
-        <h1>Account: {authUser.email}</h1>
+    {authUser =>{
+      console.log(authUser);
+      return (
+      <div className={styles.title}>
+        <h1>Hello my dear: {authUser.username}</h1>
         <PasswordForgetForm />
         <PasswordChangeForm />
-      </div>
+      </div>)}
     }
   </AuthUserContext.Consumer>
 
