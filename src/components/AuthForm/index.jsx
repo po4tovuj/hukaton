@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {auth, usersDbRef} from '../../firebase';
+
 import styles from './styles.css';
 
 class AuthForm extends Component {
@@ -17,13 +19,29 @@ class AuthForm extends Component {
     handleCreateUser = evt => {
         const { email, password } = this.state;
         evt.preventDefault();
-        this.props.onCreateUser(email, password);
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then(user => {
+                const currentUser = {
+                    id: user.uid,
+                    email: user.email,
+                };
+
+                usersDbRef
+                    .child(currentUser.id)
+                    .set(currentUser);
+
+            })
+            .catch(error => console.log(error));
+
     };
 
     handleSignInUser = evt => {
         const { email, password } = this.state;
         evt.preventDefault();
-        this.props.onSignIn(email, password);
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .catch(error => console.log(error));
     };
 
     render() {
