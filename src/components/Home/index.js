@@ -16,7 +16,8 @@ class HomePage extends Component {
 
         this.state = {
             showModal: false,
-            users: {}
+            users: {},
+            tasks: [],
         };
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -24,10 +25,11 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
+
         onceGetUsers().then(snapshot =>
             this.setState(() => ({users: snapshot.val()}))
         );
-    };
+    }
 
     handleOpenModal () {
       this.setState({ showModal: true });
@@ -40,8 +42,8 @@ class HomePage extends Component {
     render() {
 
         console.log(auth.currentUser.uid);
-        let userid = auth.currentUser.uid;
-        let category = "sex";
+
+
 // let title = "jdbfv hbedvbe";
 // writeNewPost(userid,  title, category);
 //         function writeNewPost(userid,  title, category) {
@@ -71,40 +73,6 @@ class HomePage extends Component {
 //
 //           return db.ref().update(updates);
 //         };
-
-
-
-
-
-
-
-
-        function addHabits(userid, habit, category) {
-          db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
-
-        }
-
-        addHabits("nezGSxsSuoga24lflPtjwmVXzqw1", {
-
-
-          title: "что то сделать",
-          category: category,
-          startTime: "дата начала действия привычки",
-                duration: {
-                  "1": false,
-                  "2": false,
-                  "3": false,
-                  "4": false,
-                  "5": false,
-                  "6": false,
-                  "0": false
-                },
-        }
-        );
-
-
-
-
 
         const {users, showModal} = this.state;
         return (

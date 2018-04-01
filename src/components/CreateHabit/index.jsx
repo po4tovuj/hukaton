@@ -18,7 +18,10 @@ import finance from '../../images/icon-26.svg';
 import carier from '../../images/icon-25.svg';
 import voyage from '../../images/icon-24.svg';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+import {auth, db} from "../../firebase";
 
+// let userid = auth.currentUser.uid;
+// let userid = "hsgdvgwsyfgywfgywgfey";
 ReactModal.setAppElement('#root');
 const initialState = {
     title: '',
@@ -79,6 +82,7 @@ export default class CreateHabit extends Component {
         this.handleChangeTime = this.handleChangeTime.bind(this);
     }
     // dur = this.state.duration;
+
 
     handleChange(date) {
         this.setState({startDate: date});
@@ -227,14 +231,28 @@ export default class CreateHabit extends Component {
         const newHabit = {
             title: title,
             category: category,
-            startDate: startDate,
-            rememberTime: rememberTime,
+            startDate: '01.04.2018',
+            rememberTime: '04.04.2018',
             duration: duration
         }
         console.log('Go fetch to Base', newHabit);
+        console.log(auth.currentUser.uid);
+        
+        function addHabits(userid, habit) {
+          db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
+          // console.log(habit)
+
+        }
+
+        addHabits(auth.currentUser.uid, newHabit);
+        
         this.setState(initialState, () => (console.log(`ClearState`, this.state)));
         this.props.handleCloseModal();
+        
+        
     }
+    
+    
 
     render() {
         const habitsCategories = [
