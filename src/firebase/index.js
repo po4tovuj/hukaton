@@ -1,9 +1,9 @@
-import * as auth from './auth';
-import * as db from './db';
-import * as firebase from './firebase';
+export {doCreateUserWithEmailAndPassword,
+    doSignInWithEmailAndPassword,
+    doSignOut,
+    doPasswordReset,
+    doPasswordUpdate } from './auth';
 
-export {
-  auth,
-  db,
-  firebase,
-};
+export { auth, db } from './firebase';
+
+export { doCreateUser, onceGetUsers } from './db';
