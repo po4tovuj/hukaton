@@ -6,17 +6,18 @@ import SignOutButton from '../SignOut';
 import * as routes from '../../constants/routes';
 import { Ava } from '../Avatar';
 import HomeBtn from  '../HomeButton';
-const Navigation = () => (
+import bell from  '../../images/icons-11.svg';
+const Navigation = () =>
   <AuthUserContext.Consumer>
     {authUser => authUser
       ? <NavigationAuth />
       : null
     }
-  </AuthUserContext.Consumer>)
+  </AuthUserContext.Consumer>
 
 const NavigationAuth = () =>(
   <ul className={styles.ul}>
-      {/*<li className={styles.navlist}><HomeBtn /></li>*/}
+      <li className={styles.navlist}><img src={bell} alt="" className={styles.bell} /></li>
       <li className={styles.navlist}><Link to={routes.ACCOUNT}><Ava /></Link></li>
     <li className={styles.navlist}><SignOutButton /></li>
 

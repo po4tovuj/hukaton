@@ -61,8 +61,10 @@ export default class CreateHabit extends Component {
                 carier: false,
                 voyage: false
             },
-            startDate: moment(),
-            rememberTime: moment(),
+            datePicDate:moment(),
+            datePicTime:moment(),
+            startDate: '',
+            rememberTime: '',
             customDays: false,
             duration: {
                 1: false,
@@ -81,11 +83,12 @@ export default class CreateHabit extends Component {
     // dur = this.state.duration;
 
     handleChange(date) {
-        this.setState({startDate: date});
+
+        this.setState({datePicDate: date, startDate: date.format("MMM Do YY")});
         console.log(this.state.startDate);
     }
     handleChangeTime(date) {
-        this.setState({rememberTime: date});
+        this.setState({datePicTime: date, rememberTime: date.format('MMMM Do YYYY, h:mm:ss a')});
         console.log(this.state.startDate);
     }
 
@@ -289,7 +292,7 @@ export default class CreateHabit extends Component {
 
                     </div>
                     <label className={styles.label}>Начало привычки
-                        <DatePicker selected={this.state.startDate} onChange={this.handleChange} required />
+                        <DatePicker selected={this.state.datePicDate} onChange={this.handleChange} required />
                     </label>
                     {this.state.customDays && <DaysList selectDay={this.selectDay} />}
                     <label className={styles.label}>
@@ -304,7 +307,7 @@ export default class CreateHabit extends Component {
                     <label className={styles.label}>
                         Время Напоминаний
                         <DatePicker
-                            selected={this.state.rememberTime}
+                            selected={this.state.datePicTime}
                             onChange={this.handleChangeTime}
                             showTimeSelect
                             showTimeSelectOnly
