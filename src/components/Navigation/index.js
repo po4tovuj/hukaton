@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import styles from './styles.css';
 import AuthUserContext from '../Session/AuthUserContext';
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants/routes';
-
+import { Ava } from '../Avatar';
+import HomeBtn from  '../HomeButton';
 const Navigation = () =>
   <AuthUserContext.Consumer>
     {authUser => authUser
@@ -13,18 +14,19 @@ const Navigation = () =>
     }
   </AuthUserContext.Consumer>
 
-const NavigationAuth = () =>
-  <ul>
-    {/* <li><Link to={routes.LANDING}>Landing</Link></li> */}
-    <li><Link to={routes.HOME}>Home</Link></li>
-    <li><Link to={routes.ACCOUNT}>Account</Link></li>
-    <li><SignOutButton /></li>
-  </ul>
+const NavigationAuth = () =>(
+  <ul className={styles.ul}>
+      <li className={styles.navlist}><HomeBtn /></li>
+      <li className={styles.navlist}><Link to={routes.ACCOUNT}><Ava /></Link></li>
+    <li className={styles.navlist}><SignOutButton /></li>
 
-const NavigationNonAuth = () =>
-  <ul>
-    {/* <li><Link to={routes.LANDING}>Landing</Link></li> */}
-    <li><Link to={routes.SIGN_IN}>Sign In</Link></li>
-  </ul>
+  </ul>);
+
+const NavigationNonAuth = () => (
+        <ul>
+            {/*<li className={styles.navlist}><Link to={routes.SIGN_IN}></Link></li>*/}
+        </ul>
+);
+
 
 export default Navigation;
