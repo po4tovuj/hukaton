@@ -1,37 +1,45 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
-import {db} from '../../firebase';
+import { db } from '../../firebase';
 import Sidebar from "../Sidebar";
-import Habit from "../Habit";
-import NewHabit from "../NewHabits";
+import NewHabit from '../NewHabit';
+import List from '../List';
 import styles from './styles.css';
-import DateField from "../DateField";
+import habitsData from './db.json';
+import { Route } from 'react-router-dom';
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            users: {}
+            user: {},
+            userHabbits: []
         };
     }
 
     componentDidMount() {
-        db.onceGetUsers().then(snapshot =>
-            this.setState(() => ({users: snapshot.val()}))
+        db.onceGetUsers().then(snapshot => {
+            this.setState(() => ({ user: snapshot.val() }));
+        }
         );
+        const userHabbits = Object.values(habitsData.habits.userID1);
+        console.log('userHabbits: ', userHabbits);
     }
 
     render() {
-        const {users} = this.state;
+        const { user } = this.state;
+        const { match } = this.props;
+        const userId = Object.values(habitsData.habits.userID1);
+
         return (
             <div className={styles.habit}>
-                <Sidebar/>
+                <Sidebar {...this.props} userId={userId} habitsData={habitsData}/>
+
                 <div className={styles.wrapper}>
                     <NewHabit />
-                    <DateField/>
-                    <Habit/>
+                    <Route path={`${match.url}/:category`} render={(props) => <List {...props} habits={userId} />} />
                 </div>
             </div>
         );

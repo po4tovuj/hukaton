@@ -1,0 +1,42 @@
+.NewHabits{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    margin: 0 auto;
+    box-shadow: 5px 3px 3px gray;
+    background-color: white;
+    margin-bottom: 20px;
+}
+.inputText{
+    border: none;
+    width: 100%;
+    outline:none;
+    font-size: 15px;
+}
+.form{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 5px 10px;
+    border: 1px solid gray;
+}
+.buttonAdd{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ef5350;
+    margin-right: 20px;
+    outline:none;
+    box-shadow: none;
+    transition: all 0.2s linear;
+}
+.buttonAdd:hover{
+    box-shadow: 2px 2px 2px gray;
+}

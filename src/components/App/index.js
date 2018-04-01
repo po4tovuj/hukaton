@@ -20,20 +20,19 @@ import './index.css';
 import Sidebar from "../Sidebar";
 import Habit from "../Habit";
 
-const App = () =>
+const App = (props) =>
   <Router>
     <div className="app">
       <Navigation />
 
-
       <hr/>
 
       {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
-      <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
-      <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
-      <Route exact path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
-      <Route exact path={routes.HOME} component={() => <HomePage />} />
-      <Route exact path={routes.ACCOUNT} component={() => <AccountPage />} />
+      <Route  path={routes.SIGN_UP} component={() => <SignUpPage />} />
+      <Route  path={routes.SIGN_IN} component={() => <SignInPage />} />
+      <Route  path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
+      <Route  path={routes.HOME} component={HomePage} />
+      <Route  path={routes.ACCOUNT} component={() => <AccountPage />} />
       {/* <Redirect to={routes.SIGN_IN} /> */}
       <hr/>
 
