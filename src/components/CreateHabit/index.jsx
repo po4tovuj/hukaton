@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './styles.css';
 import CategoryItem from '../CategoryItem';
+import DaysList from '../DaysList';
 
 import family from '../../images/icon-20.svg';
 import health from '../../images/icon-28.svg';
@@ -25,7 +26,29 @@ export default class CreateHabit extends Component {
    super();
    this.state = {
      showModal: false,
-     startDate: moment()
+     title: '',
+     category: {
+         family: false,
+         health: false,
+         self: false,
+         hobby: false,
+         environment: false,
+         finance: false,
+         carier: false,
+         voyage: false
+     },
+     startDate: moment(),
+     rememberTime: moment(),
+     customDays: false,
+     duration: {
+       mon: false,
+       tue: false,
+       wed: false,
+       thu: false,
+       fri: false,
+       sat: false,
+       sun: false
+     },
    };
 
    this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -45,43 +68,133 @@ export default class CreateHabit extends Component {
      this.setState({
        startDate: date
      });
+     console.log(this.state.startDate);
    }
+   handleChangeTime(date) {
+       this.setState({
+         rememberTime: date
+       });
+       console.log(this.state.startDate);
+     }
+
+    handleChangeTitle = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            title: value
+        }
+    );
+    };
+
+    checkCategory = (category, btnActive) => {
+        console.log(category);
+        const btn = document.getElementById(category);
+        btn.classList.toggle(btnActive);
+        const currentcategory = this.state.category;
+        for (let key in currentcategory) {
+            currentcategory[key] = key === category ?
+                currentcategory[key] === false ?
+                    true : false
+                    : false;
+        };
+        console.log(currentcategory);
+        this.setState({
+            category: currentcategory
+        }
+    );
+};
+
+getDuration = (evt) => {
+    console.log(evt.target.value);
+
+    switch (evt.target.value) {
+        case "workDays":
+            this.setState({
+                duration: {
+                    mon: true,
+                    tue: true,
+                    wed: true,
+                    thu: true,
+                    fri: true,
+                    sat: false,
+                    sun: false},
+            });
+          break;
+        case "holydays":
+        this.setState({
+            duration: {
+                  mon: false,
+                  tue: false,
+                  wed: false,
+                  thu: false,
+                  fri: false,
+                  sat: true,
+                  sun: true }
+              });
+      break;
+      case "everyday":
+      this.setState({
+          duration: {
+        mon: true,
+        tue: true,
+        wed: true,
+        thu: true,
+        fri: true,
+        sat: true,
+        sun: true }
+    });
+    break;
+    case "customDays":
+    this.setState({
+        customDays: true,
+  });break;
+};
+console.log(this.state.duration);
+}
 
  render () {
      const habitsCategories = [
         {
+            categoryId: 'family',
             categoryName: 'Семья',
             icon: family
         },
         {
+            categoryId: 'health',
             categoryName: 'Здоровье',
             icon: health
         },
         {
+            categoryId: 'self',
             categoryName: 'Саморазвитие',
             icon: self
         },
         {
+            categoryId: 'hobby',
             categoryName: 'Досуг',
             icon: hobbys
         },
         {
+            categoryId: 'environment',
             categoryName: 'Окружение',
             icon: enviroment
         },
         {
+            categoryId: 'finance',
             categoryName: 'Финансы',
             icon: finance
         },
         {
+            categoryId: 'carier',
             categoryName: 'Карьера',
             icon: carier
         },
         {
+            categoryId: 'voyage',
             categoryName: 'Путешевствия',
             icon: voyage
         }
     ];
+
    return (
      <div className={styles.CreateHabit}>
        <button onClick={this.handleOpenModal}>Trigger Modal</button>
@@ -95,11 +208,11 @@ export default class CreateHabit extends Component {
        <button className={styles.closeBtn} onClick={this.handleCloseModal} >X</button>
          <h4 className={styles.header}>Новая привычка</h4>
          <form className={styles.form}>
-             <input className={styles.input} placeholder="Название" />
+             <input className={styles.input} id="title" placeholder="Название" />
              <div className={styles.categoryWrapper}>
                  {habitsCategories.map(item => (
                      <div className={styles.categoryItem} key={item.categoryName}>
-                          <CategoryItem categoryName={item.categoryName} icon={item.icon} />
+                          <CategoryItem categoryName={item.categoryName} icon={item.icon} checkCategory={this.checkCategory} categoryId={item.categoryId} />
                       </div>
                  ))}
 
@@ -107,9 +220,10 @@ export default class CreateHabit extends Component {
              <label className={styles.label}>Начало привычки
                  <DatePicker selected={this.state.startDate} onChange={this.handleChange} />
              </label>
+            {this.state.customDays && <DaysList />}
              <label className={styles.label}>
                  Напоминания
-                 <select className={styles.select}>
+                 <select className={styles.select} onChange={this.getDuration}>
                     <option className={styles.option} value="workDays">Рабочие дни</option>
                     <option className={styles.option} value="holydays">Выходные дни</option>
                     <option className={styles.option} value="everyday">Ежедневно</option>
@@ -120,7 +234,7 @@ export default class CreateHabit extends Component {
                  Время Напоминаний
                  <DatePicker
                         selected={this.state.startDate}
-                        onChange={this.handleChange}
+                        onChange={this.handleChangeTime}
                         showTimeSelect
                         showTimeSelectOnly
                         timeIntervals={15}
