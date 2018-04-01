@@ -4,10 +4,10 @@ import { calcDay, normalizeDate } from '../DateField';
 
 export default class Habit extends Component {
 
-    state = {
-        dayHabitState: {"1": true, "2": false, "3": true, "4": false, "5": true, "6": true, "0": true},
-        habitsDone: {"29.03": true, "30.03": true, "31.03": false},
-    };
+    // state = {
+    //     dayHabitState: this.props.dayHabitState,
+    //     habitsDone: this.props.habitsDone,
+    // };
 
     handleClick = (evt) => {
         let currentClass;
@@ -35,25 +35,25 @@ export default class Habit extends Component {
 
         const handleIconStyle =(checked) =>  {
             let style = [styles.sign];
-            this.state.dayHabitState[checked.getDay()] ? style =[...style, styles.sign__todo] : style =[...style, styles.sign__none];
+            this.props.dayHabitState[checked.getDay()] ? style =[...style, styles.sign__todo] : style =[...style, styles.sign__none];
             let index = style.includes(styles.sign__todo);
 
-            if(checked<day && index>0 && this.state.habitsDone[normalizeDate(checked)]) {
+            if(checked<day && index>0 && this.props.habitsDone[normalizeDate(checked)]) {
                 style = style.slice(0, 1);
                 style = [...style, styles.sign__done];
-            } else if (checked<day && index>0 && !this.state.habitsDone[normalizeDate(checked)]){
+            } else if (checked<day && index>0 && !this.props.habitsDone[normalizeDate(checked)]){
                 style = style.slice(0, 1);
                 style = [...style, styles.sign__not_done];
             }
             return style.join(' ');
         };
 
-
+console.log('aaaaaa', this.props.dayHabitState);
 
         return (
             <div className={styles.wrapper}>
-                <div className={styles.number}>1.</div>
-                <div className={styles.title}>Качать прес</div>
+                <div className={styles.number}> {this. props.index + 1} </div>
+                <div className={styles.title}>{this.props.title}</div>
                 <div className={handleIconStyle(today_2)}></div>
                 <div className={handleIconStyle(today_1)}></div>
                 <div className={handleIconStyle(day)} onClick={this.handleClick}></div>

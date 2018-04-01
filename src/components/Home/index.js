@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
 import { onceGetUsers, auth, db } from '../../firebase';
 import Sidebar from "../Sidebar";
-import Habit from "../Habit";
-import NewHabit from "../NewHabits";
+import NewHabit from '../NewHabit';
+import List from '../List';
 import styles from './styles.css';
 import DateField from "../DateField";
 import CreateHabit from "../CreateHabit";
@@ -77,7 +77,8 @@ class HomePage extends Component {
         const {users, showModal} = this.state;
         return (
             <div className={styles.habit}>
-                <Sidebar/>
+                <Sidebar {...this.props} userId={userId} habitsData={habitsData}/>
+
                 <div className={styles.wrapper}>
                     <NewHabit handleOpenModal={this.handleOpenModal} />
                     <DateField/>
