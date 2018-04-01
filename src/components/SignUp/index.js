@@ -3,22 +3,23 @@ import {
   Link,
   withRouter,
 } from 'react-router-dom';
-
-import { auth, db } from '../../firebase';
+import { doCreateUserWithEmailAndPassword, doCreateUser } from '../../firebase';
 import * as routes from '../../constants/routes';
+import styles from '../SignIn/styles.css';
 
-const SignUpPage = ({ history }) =>
+const SignUpPage = ({ history }) => (
   <div>
-    <h1>SignUp</h1>
     <SignUpForm history={history} />
   </div>
+);
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
+
 const INITIAL_STATE = {
-  username: '',
+  displayName: '',
   email: '',
   passwordOne: '',
   passwordTwo: '',
@@ -29,12 +30,22 @@ class SignUpForm extends Component {
   constructor(props) {
     super(props);
 
+
     this.state = { ...INITIAL_STATE };
   }
+    handleChange = (evt) => {
+      const name = evt.target.name;
+      const value = evt.target.value;
+      this.setState({
+          [name]: value,
+
+      })
+
+    };
 
   onSubmit = (event) => {
     const {
-      username,
+      displayName,
       email,
       passwordOne,
     } = this.state;
@@ -43,11 +54,16 @@ class SignUpForm extends Component {
       history,
     } = this.props;
 
-    auth.doCreateUserWithEmailAndPassword(email, passwordOne)
+    doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-
+          console.log(authUser);
+          authUser
+              .updateProfile({
+                  displayName: displayName,
+              })
+              .catch(error => console.log(error));
         // Create a user in your own accessible Firebase Database too
-        db.doCreateUser(authUser.uid, username, email)
+        doCreateUser(authUser.uid, displayName, email)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.HOME);
@@ -58,15 +74,15 @@ class SignUpForm extends Component {
 
       })
       .catch(error => {
-        this.setState(updateByPropertyName('error', error));
+        this.setState(console.log('error', error));
       });
 
     event.preventDefault();
-  }
+  };
 
   render() {
     const {
-      username,
+      displayName,
       email,
       passwordOne,
       passwordTwo,
@@ -76,36 +92,42 @@ class SignUpForm extends Component {
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
-      username === '' ||
+      displayName === '' ||
       email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={username}
-          onChange={event => this.setState(updateByPropertyName('username', event.target.value))}
+      <form className={styles.form} onSubmit={this.onSubmit}>
+        <input className={styles.input}
+          value={displayName}
+               name="displayName"
+          onChange={this.handleChange}
           type="text"
           placeholder="Full Name"
         />
-        <input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
+        <input className={styles.input}
+               name="email"
+
+               value={email}
+               onChange={this.handleChange}
+               type="text"
           placeholder="Email Address"
         />
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
+        <input className={styles.input}
+               name="passwordOne"
+
+               value={passwordOne}
+               onChange={this.handleChange}
           type="password"
           placeholder="Password"
         />
-        <input
+        <input className={styles.input}
+               name="passwordTwo"
           value={passwordTwo}
-          onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
+               onChange={this.handleChange}
           type="password"
           placeholder="Confirm Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button className={styles.button} disabled={isInvalid} type="submit">
           Sign Up
         </button>
 
@@ -115,12 +137,13 @@ class SignUpForm extends Component {
   }
 }
 
-const SignUpLink = () =>
+const SignUpLink = () => (
   <p>
     Don't have an account?
     {' '}
     <Link to={routes.SIGN_UP}>Sign Up</Link>
   </p>
+);
 
 export default withRouter(SignUpPage);
 
