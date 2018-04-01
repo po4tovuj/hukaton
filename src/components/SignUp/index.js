@@ -74,7 +74,7 @@ class SignUpForm extends Component {
 
       })
       .catch(error => {
-        this.setState(updateByPropertyName('error', error));
+        this.setState(console.log('error', error));
       });
 
     event.preventDefault();

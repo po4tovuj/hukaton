@@ -16,15 +16,21 @@ export default class NewHabits extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log(this.state);
+        this.props.handleOpenModal();
+    }
+
+    handleClick = (event) => {
+        event.preventDefault();
+        console.log("Click!!");
+        this.props.handleOpenModal();
     }
 
     render() {
         return (
             <div className={styles.NewHabits}>
                 <form className={styles.form} onSubmit={this.handleSubmit}>
-                    <input type="submit" className={styles.buttonAdd} value="+" />
-                    <span className={styles.formText} onChange={this.handleInputValue}>Добавить привычку</span>
+                    <button className={styles.buttonAdd} onClick={this.handleClick}>+</button>
+                    <input type="text" className={styles.inputText} placeholder="Добавить привычку" onChange={this.handleInputValue} />
                 </form>
             </div>
         );
