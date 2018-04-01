@@ -30,6 +30,6 @@ const withAuthentication = (Component) =>
         </AuthUserContext.Provider>
       );
     }
-  }
+  };
 
 export default withAuthentication;

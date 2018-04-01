@@ -4,10 +4,10 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+import Header from '../Header';
 
 import styles from './index.css';
-import Navigation from '../Navigation';
-import LandingPage from '../Landing';
+// import LandingPage from '../Landing';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
@@ -23,10 +23,9 @@ import Habit from "../Habit";
 const App = () =>
   <Router>
     <div className="app">
-      <Navigation />
+          <Header />
 
 
-      <hr/>
 
       {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
       <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
@@ -35,7 +34,7 @@ const App = () =>
       <Route exact path={routes.HOME} component={() => <HomePage />} />
       <Route exact path={routes.ACCOUNT} component={() => <AccountPage />} />
       {/* <Redirect to={routes.SIGN_IN} /> */}
-      <hr/>
+
 
       {/* <span>Found in <a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></span> | <span>Star the <a href="https://github.com/rwieruch/react-firebase-authentication">Repository</a></span> | <span>Receive a <a href="https://www.getrevue.co/profile/rwieruch">Developer's Newsletter</a></span> */}
     </div>

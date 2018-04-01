@@ -1,13 +1,16 @@
 import React from 'react';
+import  styles from '../../styles/theme.css';
 
 import { auth } from '../../firebase';
 
 const SignOutButton = () =>
-  <button
+    (<button
+        className={styles.btnLogout}
     type="button"
     onClick={auth.doSignOut}
   >
-    Sign Out
-  </button>
+        Log Out
+      {/*<img className={styles.out} src={logout}/>*/}
+  </button>);
 
 export default SignOutButton;

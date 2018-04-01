@@ -6,12 +6,14 @@ import {
 
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
+import styles from '../../styles/theme.css';
 
-const SignUpPage = ({ history }) =>
+const SignUpPage = ({ history }) => (
   <div>
-    <h1>SignUp</h1>
+    {/*<h1>SignUp</h1>*/}
     <SignUpForm history={history} />
   </div>
+);
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -80,32 +82,32 @@ class SignUpForm extends Component {
       email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <form className={styles.form} onSubmit={this.onSubmit}>
+        <input className={styles.input}
           value={username}
           onChange={event => this.setState(updateByPropertyName('username', event.target.value))}
           type="text"
           placeholder="Full Name"
         />
-        <input
+        <input className={styles.input}
           value={email}
           onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
           type="text"
           placeholder="Email Address"
         />
-        <input
+        <input className={styles.input}
           value={passwordOne}
           onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
           type="password"
           placeholder="Password"
         />
-        <input
+        <input className={styles.input}
           value={passwordTwo}
           onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
           type="password"
           placeholder="Confirm Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button className={styles.button} disabled={isInvalid} type="submit">
           Sign Up
         </button>
 
