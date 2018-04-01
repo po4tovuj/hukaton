@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
-import {db} from '../../firebase';
+import { onceGetUsers, auth } from '../../firebase';
 import Sidebar from "../Sidebar";
 import Habit from "../Habit";
 import NewHabit from "../NewHabits";
 import styles from './styles.css';
 import DateField from "../DateField";
 import CreateHabit from "../CreateHabit";
+
 
 class HomePage extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
-        db.onceGetUsers().then(snapshot =>
+        onceGetUsers().then(snapshot =>
             this.setState(() => ({users: snapshot.val()}))
         );
     };
@@ -37,6 +38,7 @@ class HomePage extends Component {
     }
 
     render() {
+        console.log(auth.currentUser.uid);
         const {users, showModal} = this.state;
         return (
             <div className={styles.habit}>

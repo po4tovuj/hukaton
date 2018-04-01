@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import styles from '../Account/styles.css';
+import styles2 from '../../styles/theme.css';
 import { auth } from '../../firebase';
 
 const updateByPropertyName = (propertyName, value) => () => ({
@@ -31,7 +32,7 @@ class PasswordChangeForm extends Component {
       });
 
     event.preventDefault();
-  }
+  };
 
   render() {
     const {
@@ -45,14 +46,14 @@ class PasswordChangeForm extends Component {
       passwordOne === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <form  className={styles.accountForm} onSubmit={this.onSubmit}>
+        <input className={styles2.input}
           value={passwordOne}
           onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
           type="password"
           placeholder="New Password"
         />
-        <input
+        <input className={styles2.input}
           value={passwordTwo}
           onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
           type="password"
