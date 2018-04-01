@@ -10,11 +10,31 @@ const config = {
   };
 
 firebase.initializeApp(config);
-
-
-export const db = firebase.database();
-// const userId = "xc8EAjvFjEZDyXOCrY74am3mgHb2";
-
+const auth1 = firebase.auth();
 export const auth = firebase.auth();
-
-
+export const db = firebase.database();
+// const userId = firebase.auth().curentUser.uid;
+console.log('jwsgdhgwifg ' , auth1.currentUser);
+let category = "sex";
+//   let habitsDbRef = db.child("habits");
+// function addHabits(userid, habit, category) {
+//   habitsDbRef.child(`${userid}`).push(habit).catch(err => console.log(err));
+// console.log(habitsDbRef.child(`${userid}`));
+// }
+//
+// addHabits("nezGSxsSuoga24lflPtjwmVXzqw1", {
+//
+//   title: "что то сделать",
+//   category: category,
+//   startTime: "дата начала действия привычки",
+//         duration: {
+//           "1": false,
+//           "2": false,
+//           "3": false,
+//           "4": false,
+//           "5": false,
+//           "6": false,
+//           "0": false
+//         },
+// }
+// );
