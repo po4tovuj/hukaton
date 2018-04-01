@@ -8,6 +8,7 @@ const CategoryItem = ({categoryName, icon, checkCategory, categoryId }) => {
         const btnActive = styles.btnActive;
         checkCategory(category, btnActive);
     };
+
     return (
 <button className={styles.item} onClick={handleClick} id={categoryId} >
             <img src={icon} alt={categoryName} title="Выбрать категорию {categoryName}" className={styles.img} />

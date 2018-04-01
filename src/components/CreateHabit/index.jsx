@@ -20,6 +20,31 @@ import voyage from '../../images/icon-24.svg';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 ReactModal.setAppElement('#root');
+const initialState = {
+    title: '',
+    category: {
+        family: false,
+        health: false,
+        self: false,
+        hobby: false,
+        environment: false,
+        finance: false,
+        carier: false,
+        voyage: false
+    },
+    startDate: moment(),
+    rememberTime: moment(),
+    customDays: false,
+    duration: {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        0: false
+    }
+};
 
 export default class CreateHabit extends Component {
     constructor() {
@@ -51,6 +76,7 @@ export default class CreateHabit extends Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeTime = this.handleChangeTime.bind(this);
     }
     // dur = this.state.duration;
 
@@ -70,8 +96,6 @@ export default class CreateHabit extends Component {
 
     checkCategory = (category, btnActive) => {
         console.log(category);
-        const btn = document.getElementById(category);
-        btn.classList.toggle(btnActive);
         const currentcategory = this.state.category;
         for (let key in currentcategory) {
             currentcategory[key] = key === category
@@ -81,7 +105,17 @@ export default class CreateHabit extends Component {
                 : false;
         };
         console.log(currentcategory);
-        this.setState({category: currentcategory});
+        this.setState({category: currentcategory},
+        () => {
+            for (let key in currentcategory) {
+                const btn = document.getElementById(key);
+                if (currentcategory[key]) {
+                    btn.classList.add(btnActive);
+                } else if (btn.classList.contains(btnActive)) {
+                    btn.classList.remove(btnActive);
+                }
+            }
+        });
     };
 
     getDuration = (evt) => {
@@ -198,6 +232,8 @@ export default class CreateHabit extends Component {
             duration: duration
         }
         console.log('Go fetch to Base', newHabit);
+        this.setState(initialState, () => (console.log(`ClearState`, this.state)));
+        this.props.handleCloseModal();
     }
 
     render() {
@@ -247,7 +283,7 @@ export default class CreateHabit extends Component {
                     <div className={styles.categoryWrapper}>
                         {
                             habitsCategories.map(item => (<div className={styles.categoryItem} key={item.categoryName}>
-                                <CategoryItem categoryName={item.categoryName} icon={item.icon} checkCategory={this.checkCategory} categoryId={item.categoryId}/>
+                                <CategoryItem categoryName={item.categoryName} icon={item.icon} checkCategory={this.checkCategory} categoryId={item.categoryId} />
                             </div>))
                         }
 
@@ -268,8 +304,8 @@ export default class CreateHabit extends Component {
                     <label className={styles.label}>
                         Время Напоминаний
                         <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.handleChange}
+                            selected={this.state.rememberTime}
+                            onChange={this.handleChangeTime}
                             showTimeSelect
                             showTimeSelectOnly
                             timeIntervals={15}
