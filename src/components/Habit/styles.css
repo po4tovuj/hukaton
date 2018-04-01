@@ -15,41 +15,44 @@
 .title {
     width: 40%;
     padding-left: 20px;
+}
 
+.sign {
+    width: 8%;
+}
+
+.sign:nth-child(5){
+    background-color: #f3f4fb;
 }
 
 .sign__todo {
-    width: 8%;
     background: url('../../images/icon-17_gray.svg') no-repeat 50% 50%;
-    background-size: 30%;
+    background-size: 25px;
 }
 
-.sign__todo__done{
-     width: 8%;
+.sign__done{
      background: url('../../images/icon-17.svg') no-repeat 50% 50%;
-     background-size: 30%;
+     background-size: 25px;
 }
 
 .sign__not_done{
-    width: 8%;
     background: url('../../images/icon-19.svg') no-repeat 50% 50%;
-    background-size: 25%;
+    background-size: 20px;
 }
 
 .sign__none{
-    width: 8%;
     background: url('../../images/icon-18.svg') no-repeat 50% 50%;
-    background-size: 30%;
+    background-size: 25px;
 }
 
 .basket {
     width: 10%;
     background: url('../../images/icon-13.svg') no-repeat 50% 50%;
-    background-size: 15%;
+    background-size: 20px;
 }
 
 .basket__orange {
     width: 10%;
     background: url('../../images/icon-13_orange.svg') no-repeat 50% 50%;
-    background-size: 15%;
+    background-size: 20px;
 }
