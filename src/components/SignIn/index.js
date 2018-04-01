@@ -5,7 +5,7 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { doSignInWithEmailAndPassword } from '../../firebase';
 import * as routes from '../../constants/routes';
-import  styles from '../../styles/theme.css';
+import  styles from './styles.css';
 
 
 const SignInPage = ({ history }) =>(

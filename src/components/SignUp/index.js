@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import { doCreateUserWithEmailAndPassword, doCreateUser } from '../../firebase';
 import * as routes from '../../constants/routes';
-import styles from '../../styles/theme.css';
+import styles from '../SignIn/styles.css';
 
 const SignUpPage = ({ history }) => (
   <div>
