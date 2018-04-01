@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Link,
-  withRouter,
-} from 'react-router-dom';
+import { Link, withRouter} from 'react-router-dom';
 import { doCreateUserWithEmailAndPassword, doCreateUser } from '../../firebase';
 import * as routes from '../../constants/routes';
 import styles from '../SignIn/styles.css';
@@ -68,13 +65,13 @@ class SignUpForm extends Component {
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.HOME);
           })
-          .catch(error => {
-            this.setState(updateByPropertyName('error', error));
-          });
+          // .catch(error => {
+          //   this.setState(updateByPropertyName('error', error));
+          // });
 
       })
       .catch(error => {
-        this.setState(console.log('error', error));
+        this.setState(updateByPropertyName('error', error));
       });
 
     event.preventDefault();
@@ -97,33 +94,18 @@ class SignUpForm extends Component {
 
     return (
       <form className={styles.form} onSubmit={this.onSubmit}>
-        <input className={styles.input}
-          value={displayName}
-               name="displayName"
-          onChange={this.handleChange}
+        <input className={styles.input} value={displayName} name="displayName" onChange={this.handleChange}
           type="text"
           placeholder="Full Name"
         />
-        <input className={styles.input}
-               name="email"
-
-               value={email}
-               onChange={this.handleChange}
-               type="text"
+        <input className={styles.input} name="email" value={email} onChange={this.handleChange} type="text"
           placeholder="Email Address"
         />
-        <input className={styles.input}
-               name="passwordOne"
-
-               value={passwordOne}
-               onChange={this.handleChange}
+        <input className={styles.input} name="passwordOne" value={passwordOne} onChange={this.handleChange}
           type="password"
           placeholder="Password"
         />
-        <input className={styles.input}
-               name="passwordTwo"
-          value={passwordTwo}
-               onChange={this.handleChange}
+        <input className={styles.input} name="passwordTwo" value={passwordTwo} onChange={this.handleChange}
           type="password"
           placeholder="Confirm Password"
         />
