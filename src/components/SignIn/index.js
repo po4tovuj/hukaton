@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { SignUpLink } from '../SignUp';
-import { PasswordForgetLink } from '../PasswordForget';
 import { doSignInWithEmailAndPassword } from '../../firebase';
 import * as routes from '../../constants/routes';
 import  styles from './styles.css';
@@ -81,7 +80,6 @@ class SignInForm extends Component {
         <button className={styles.button} disabled={isInvalid} type="submit">
           Log In
         </button>
-        <PasswordForgetLink />
         <SignUpLink />
 
         { error && <p>{error.message}</p> }
@@ -93,6 +91,4 @@ class SignInForm extends Component {
 
 export default withRouter(SignInPage);
 
-export {
-  SignInForm,
-};
+export { SignInForm };
