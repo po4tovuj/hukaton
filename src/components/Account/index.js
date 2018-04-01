@@ -13,7 +13,7 @@ const AccountPage = () =>
   <AuthUserContext.Consumer>
     {authUser =>{
 
-      console.log(auth.currentUser);
+      console.log(auth.currentUser.uid);
       return (
       <div className={styles.title}>
         <h1>Hello my dear: {authUser.displayName}</h1>
