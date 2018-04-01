@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../Account/styles.css';
 import styles2 from '../../styles/theme.css';
-import { auth } from '../../firebase';
+import { doPasswordUpdate, doSignOut } from '../../firebase';
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -23,10 +23,11 @@ class PasswordChangeForm extends Component {
   onSubmit = (event) => {
     const { passwordOne } = this.state;
 
-    auth.doPasswordUpdate(passwordOne)
+    doPasswordUpdate(passwordOne)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
       })
+        .then(doSignOut)
       .catch(error => {
         this.setState(updateByPropertyName('error', error));
       });
