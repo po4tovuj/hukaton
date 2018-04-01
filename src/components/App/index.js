@@ -24,11 +24,10 @@ const App = (props) =>
       <hr/>
 
       {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
-      <Route  path={routes.SIGN_UP} component={() => <SignUpPage />} />
-      <Route  path={routes.SIGN_IN} component={() => <SignInPage />} />
-      <Route  path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
-      <Route  path={routes.HOME} component={HomePage} />
-      <Route  path={routes.ACCOUNT} component={() => <AccountPage />} />
+      <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
+      <Route path={routes.SIGN_UP} component={() => <SignUpPage />} />
+      <Route path={routes.HOME} component={() => <HomePage />} />
+      <Route path={routes.ACCOUNT} component={() => <AccountPage />} />
       {/* <Redirect to={routes.SIGN_IN} /> */}
 
 
