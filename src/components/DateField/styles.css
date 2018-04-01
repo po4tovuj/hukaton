@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 43%;
+    height: 30px;
+    margin-left: 47%;
+    margin-right: 10%;
+    line-height: 30px;
+    color: #757575;
+}
+
+.day {
+    width: 19%;
+    text-align: center;
+}
+
+.day:nth-child(3){
+    background-color: #f3f4fb;
+}
