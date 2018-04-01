@@ -24,7 +24,7 @@ export default class NewHabits extends Component {
             <div className={styles.NewHabits}>
                 <form className={styles.form} onSubmit={this.handleSubmit}>
                     <input type="submit" className={styles.buttonAdd} value="+" />
-                    <input type="text" className={styles.inputText} placeholder="Добавить привычку" required onChange={this.handleInputValue} />
+                    <span className={styles.formText} onChange={this.handleInputValue}>Добавить привычку</span>
                 </form>
             </div>
         );
