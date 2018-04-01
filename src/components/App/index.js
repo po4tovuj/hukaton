@@ -2,12 +2,10 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Redirect
 } from 'react-router-dom';
 import Header from '../Header';
 
-import styles from './index.css';
-// import LandingPage from '../Landing';
+import Navigation from '../Navigation';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
@@ -17,8 +15,6 @@ import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants/routes';
 
 import './index.css';
-import Sidebar from "../Sidebar";
-import Habit from "../Habit";
 
 const App = () =>
   <Router>
@@ -30,9 +26,10 @@ const App = () =>
       {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
       <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
       <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
-      <Route exact path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
-      <Route exact path={routes.HOME} component={() => <HomePage />} />
-      <Route exact path={routes.ACCOUNT} component={() => <AccountPage />} />
+      <Route path={routes.SIGN_UP} component={() => <SignUpPage />} />
+      <Route path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
+      <Route path={routes.HOME} component={() => <HomePage />} />
+      <Route path={routes.ACCOUNT} component={() => <AccountPage />} />
       {/* <Redirect to={routes.SIGN_IN} /> */}
 
 
