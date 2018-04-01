@@ -64,6 +64,7 @@
 
 .btnLogout {
     font-size: 16px;
+    outline: none;
     color: #fff;
     border: none;
     background-color: transparent;
