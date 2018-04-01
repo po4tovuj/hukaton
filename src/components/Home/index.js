@@ -7,31 +7,45 @@ import Habit from "../Habit";
 import NewHabit from "../NewHabits";
 import styles from './styles.css';
 import DateField from "../DateField";
+import CreateHabit from "../CreateHabit";
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            showModal: false,
             users: {}
         };
+
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
     componentDidMount() {
         db.onceGetUsers().then(snapshot =>
             this.setState(() => ({users: snapshot.val()}))
         );
+    };
+
+    handleOpenModal () {
+      this.setState({ showModal: true });
+    }
+
+    handleCloseModal () {
+      this.setState({ showModal: false });
     }
 
     render() {
-        const {users} = this.state;
+        const {users, showModal} = this.state;
         return (
             <div className={styles.habit}>
                 <Sidebar/>
                 <div className={styles.wrapper}>
-                    <NewHabit />
+                    <NewHabit handleOpenModal={this.handleOpenModal} />
                     <DateField/>
                     <Habit/>
+                    <CreateHabit handleCloseModal={this.handleCloseModal} showModal={showModal} />
                 </div>
             </div>
         );

@@ -10,6 +10,7 @@
     top: 0px;
     left: 0px;
     will-change: transform;
+    z-index: 1;
     }
 
 .day {
@@ -22,4 +23,11 @@
     font-size: 0.75em;
     width: 24px;
     height: 24px;
+    outline: none;
+}
+
+.dayBtnActive {
+    background-color: #303f9f;
+    color: #fff;
+    outline: none;
 }
