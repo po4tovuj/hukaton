@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import withAuthorization from '../Session/withAuthorization';
-import { onceGetUsers, auth } from '../../firebase';
+import { onceGetUsers, auth, db } from '../../firebase';
 import Sidebar from "../Sidebar";
 import Habit from "../Habit";
 import NewHabit from "../NewHabits";
@@ -38,7 +38,74 @@ class HomePage extends Component {
     }
 
     render() {
+
         console.log(auth.currentUser.uid);
+        let userid = auth.currentUser.uid;
+        let category = "sex";
+// let title = "jdbfv hbedvbe";
+// writeNewPost(userid,  title, category);
+//         function writeNewPost(userid,  title, category) {
+//           let habits = db.ref().child("habits");
+//           var postData = {
+//             title: title,
+//             category: category,
+//             startTime: "дата начала действия привычки",
+//                   duration: {
+//                     "1": false,
+//                     "2": false,
+//                     "3": false,
+//                     "4": false,
+//                     "5": false,
+//                     "6": false,
+//                     "0": false
+//                   },
+//           };
+//
+//           // Get a key for a new Post.
+//           var newPostKey = db.ref().child(habits).push().key;
+//
+//           // Write the new post's data simultaneously in the posts list and the user's post list.
+//           var updates = {};
+//           updates['/habits/' + newPostKey] = postData;
+//           // updates['/user-posts/' + userid + '/' + newPostKey] = postData;
+//
+//           return db.ref().update(updates);
+//         };
+
+
+
+
+
+
+
+
+        function addHabits(userid, habit, category) {
+          db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
+
+        }
+
+        addHabits("nezGSxsSuoga24lflPtjwmVXzqw1", {
+
+
+          title: "что то сделать",
+          category: category,
+          startTime: "дата начала действия привычки",
+                duration: {
+                  "1": false,
+                  "2": false,
+                  "3": false,
+                  "4": false,
+                  "5": false,
+                  "6": false,
+                  "0": false
+                },
+        }
+        );
+
+
+
+
+
         const {users, showModal} = this.state;
         return (
             <div className={styles.habit}>

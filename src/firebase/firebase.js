@@ -10,11 +10,8 @@ const config = {
   };
 
 firebase.initializeApp(config);
-
-
-export const db = firebase.database();
-// const userId = "xc8EAjvFjEZDyXOCrY74am3mgHb2";
-
+const auth1 = firebase.auth();
 export const auth = firebase.auth();
-
-
+export const db = firebase.database();
+// const userId = firebase.auth().curentUser.uid;
+console.log('jwsgdhgwifg ' , auth1.currentUser);
