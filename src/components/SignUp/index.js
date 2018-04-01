@@ -9,7 +9,6 @@ import styles from '../SignIn/styles.css';
 
 const SignUpPage = ({ history }) => (
   <div>
-    {/*<h1>SignUp</h1>*/}
     <SignUpForm history={history} />
   </div>
 );
@@ -138,12 +137,13 @@ class SignUpForm extends Component {
   }
 }
 
-const SignUpLink = () =>
+const SignUpLink = () => (
   <p>
     Don't have an account?
     {' '}
     <Link to={routes.SIGN_UP}>Sign Up</Link>
   </p>
+);
 
 export default withRouter(SignUpPage);
 
