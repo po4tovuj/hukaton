@@ -3,5 +3,7 @@
 }
 
 .wrapper {
+    padding: 30px;
     width: 100%;
+    background-color: #f1f2f2;
 }
