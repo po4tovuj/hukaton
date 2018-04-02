@@ -12,7 +12,7 @@ export default class List extends Component {
     return (
       <div>
         <DateField />
-        {categoryHabits.map((item, index) => (
+        {this.props.habits && categoryHabits.map((item, index) => (
           <Habit key={item.title} index={index} title={item.title} dayHabitState={item.duration} habitsDone={item.habitsDone} />
         ))}
       </div>

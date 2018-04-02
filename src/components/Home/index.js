@@ -29,7 +29,7 @@ class HomePage extends Component {
         let userId = auth.currentUser.uid;
         db.ref('habits/' + userId).on('value', (snapshot) => {
           console.log('added', snapshot.val());
-          this.setState({
+          snapshot.val() && this.setState({
             currentUserHabits: Object.values(snapshot.val()),
           })
         });
