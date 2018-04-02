@@ -13,4 +13,5 @@ firebase.initializeApp(config);
 
 export const auth = firebase.auth();
 export const db = firebase.database();
-// const userId = firebase.auth().curentUser.uid;
+// export const userId = firebase.auth().currentUser.uid;
+// console.log('userId: ', userId);

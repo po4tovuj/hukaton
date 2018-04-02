@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.css';
 
-const Sidebar = ({match, userId, habitsData})=>({
+const Sidebar = ({match, habits})=>({
     render() {
         const countHabit = (category) => {
-            const counter = Object.values(habitsData.habits.userID1).filter(item => item.category === category);
+            const counter = habits.filter(item => item.category === category);
             return counter.length || '0';
         }
 
@@ -51,7 +51,7 @@ const Sidebar = ({match, userId, habitsData})=>({
                     </li>
                     <li className={styles.category__item} id="category-all"><NavLink to={`${match.url}/all`} >
                         # Все
-                        </NavLink><span className={styles.counter}>{userId.length}</span>
+                        </NavLink><span className={styles.counter}>{habits.length}</span>
                     </li>
                 </ul>
                 <li className={styles.category}>Сегодня</li>

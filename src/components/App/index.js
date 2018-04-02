@@ -4,7 +4,6 @@ import {
   Route,
 } from 'react-router-dom';
 import Header from '../Header';
-
 import Navigation from '../Navigation';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
@@ -13,26 +12,33 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants/routes';
+import { onceGetUsers, auth, db } from '../../firebase';
+import data from '../Home/db.json'
 
 import './index.css';
 
-const App = (props) =>
-  <Router>
-    <div className="app">
-          <Header />
+class App extends React.Component {
 
-      <hr/>
+render(){
+  const userHabits = Object.values(data);
+  return (
+    <Router>
+      <div className="app">
+        <Header />
 
-      {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
-      <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
-      <Route path={routes.SIGN_UP} component={() => <SignUpPage />} />
-      <Route path={routes.HOME} component={() => <HomePage />} />
-      <Route path={routes.ACCOUNT} component={() => <AccountPage />} />
-      {/* <Redirect to={routes.SIGN_IN} /> */}
+        <hr />
+
+        {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
+        <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
+        <Route path={routes.SIGN_UP} component={() => <SignUpPage />} />
+        <Route path={routes.HOME} render={(props) => <HomePage {...props} habits={userHabits} />} />
+        <Route path={routes.ACCOUNT} component={() => <AccountPage />} />
+        {/* <Redirect to={routes.SIGN_IN} /> */}
 
 
-      {/* <span>Found in <a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></span> | <span>Star the <a href="https://github.com/rwieruch/react-firebase-authentication">Repository</a></span> | <span>Receive a <a href="https://www.getrevue.co/profile/rwieruch">Developer's Newsletter</a></span> */}
-    </div>
-  </Router>);
+        {/* <span>Found in <a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></span> | <span>Star the <a href="https://github.com/rwieruch/react-firebase-authentication">Repository</a></span> | <span>Receive a <a href="https://www.getrevue.co/profile/rwieruch">Developer's Newsletter</a></span> */}
+      </div>
+    </Router>)
+}}
 
 export default withAuthentication(App);

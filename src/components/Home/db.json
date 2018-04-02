@@ -2,7 +2,6 @@
   "habits": {
     "userID1": {
       "habitID1": {
-        "habitID": "001",
         "title": "качать пресс",
         "category": "finance",
         "startTime": "дата начала действия привычки",
@@ -24,7 +23,6 @@
         }
       },
       "habitID2": {
-        "habitID": "002",
         "title": "начать бегать",
         "category": "health",
         "startTime": "дата начала действия привычки",
@@ -46,7 +44,6 @@
         }
       },
       "habitID3": {
-        "habitID": "003",
         "title": "что то еще",
         "category": "family",
         "startTime": "дата начала действия привычки",
