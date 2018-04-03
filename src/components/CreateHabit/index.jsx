@@ -9,14 +9,6 @@ import styles from './styles.css';
 import CategoryItem from '../CategoryItem';
 import DaysList from '../DaysList';
 
-import family from '../../images/icon-20.svg';
-import health from '../../images/icon-28.svg';
-import self from '../../images/icon-22.svg';
-import hobbys from '../../images/icon-23.svg';
-import enviroment from '../../images/icon-27.svg';
-import finance from '../../images/icon-26.svg';
-import carier from '../../images/icon-25.svg';
-import voyage from '../../images/icon-24.svg';
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import {auth, db} from "../../firebase";
 
@@ -25,16 +17,7 @@ import {auth, db} from "../../firebase";
 ReactModal.setAppElement('#root');
 const initialState = {
     title: '',
-    category: {
-        family: false,
-        health: false,
-        self: false,
-        hobby: false,
-        environment: false,
-        finance: false,
-        carier: false,
-        voyage: false
-    },
+    category: '',
     startDate: moment(),
     rememberTime: moment(),
     customDays: false,
@@ -54,16 +37,7 @@ export default class CreateHabit extends Component {
         super();
         this.state = {
             title: '',
-            category: {
-                family: false,
-                health: false,
-                self: false,
-                hobby: false,
-                environment: false,
-                finance: false,
-                carier: false,
-                voyage: false
-            },
+            category: '',
             startDate: moment(),
             rememberTime: moment(),
             customDays: false,
@@ -81,8 +55,6 @@ export default class CreateHabit extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeTime = this.handleChangeTime.bind(this);
     }
-    // dur = this.state.duration;
-
 
     handleChange(date) {
         this.setState({startDate: date});
@@ -98,28 +70,18 @@ export default class CreateHabit extends Component {
         this.setState({title: value});
     };
 
-    checkCategory = (category, btnActive) => {
-        console.log(category);
-        const currentcategory = this.state.category;
-        for (let key in currentcategory) {
-            currentcategory[key] = key === category
-                ? currentcategory[key] === false
-                    ? true
-                    : false
-                : false;
-        };
-        console.log(currentcategory);
-        this.setState({category: currentcategory},
-        () => {
-            for (let key in currentcategory) {
-                const btn = document.getElementById(key);
-                if (currentcategory[key]) {
-                    btn.classList.add(btnActive);
-                } else if (btn.classList.contains(btnActive)) {
-                    btn.classList.remove(btnActive);
-                }
-            }
-        });
+    checkCategory = (currentCatID, category, btnCategoryStyle, btnActive) => {
+      this.setState({category: category},
+      () => {
+        let btnsCategory = document.querySelectorAll(`.${btnCategoryStyle}`);
+        for (let i = 0; i < btnsCategory.length; i++ ) {
+          if (btnsCategory[i].id === currentCatID) {
+            btnsCategory[i].classList.toggle(btnActive);
+          } else if (btnsCategory[i].classList.contains(btnActive)) {
+            btnsCategory[i].classList.remove(btnActive);
+          }
+        }
+      });
     };
 
     getDuration = (evt) => {
@@ -237,57 +199,51 @@ export default class CreateHabit extends Component {
         }
         console.log('Go fetch to Base', newHabit);
         console.log(auth.currentUser.uid);
-        
+
         function addHabits(userid, habit) {
           db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
           // console.log(habit)
-
         }
 
         addHabits(auth.currentUser.uid, newHabit);
-        
         this.setState(initialState, () => (console.log(`ClearState`, this.state)));
         this.props.handleCloseModal();
-        
-        
     }
-    
-    
 
     render() {
         const habitsCategories = [
             {
-                categoryId: 'family',
+                category: 'family',
+                categoryId: 0,
                 categoryName: 'Семья',
-                icon: family
             }, {
-                categoryId: 'health',
+                category: 'health',
+                categoryId: 1,
                 categoryName: 'Здоровье',
-                icon: health
             }, {
-                categoryId: 'self',
+                category: 'self',
+                categoryId: 2,
                 categoryName: 'Саморазвитие',
-                icon: self
             }, {
-                categoryId: 'hobby',
+                category: 'hobbys',
+                categoryId: 3,
                 categoryName: 'Досуг',
-                icon: hobbys
             }, {
-                categoryId: 'environment',
+                category: 'environment',
+                categoryId: 4,
                 categoryName: 'Окружение',
-                icon: enviroment
             }, {
-                categoryId: 'finance',
+                category: 'finance',
+                categoryId: 5,
                 categoryName: 'Финансы',
-                icon: finance
             }, {
-                categoryId: 'carier',
+                category: 'carier',
+                categoryId: 6,
                 categoryName: 'Карьера',
-                icon: carier
             }, {
-                categoryId: 'voyage',
+                category: 'voyage',
+                categoryId: 7,
                 categoryName: 'Путешевствия',
-                icon: voyage
             }
         ];
 
@@ -301,13 +257,17 @@ export default class CreateHabit extends Component {
                     <div className={styles.categoryWrapper}>
                         {
                             habitsCategories.map(item => (<div className={styles.categoryItem} key={item.categoryName}>
-                                <CategoryItem categoryName={item.categoryName} icon={item.icon} checkCategory={this.checkCategory} categoryId={item.categoryId} />
+                                <CategoryItem item={item} checkCategory={this.checkCategory} />
                             </div>))
                         }
-
                     </div>
                     <label className={styles.label}>Начало привычки
-                        <DatePicker selected={this.state.startDate} onChange={this.handleChange} required />
+                        <DatePicker
+                          selected={this.state.startDate}
+                          onChange={this.handleChange}
+                          dateFormat="L"
+                          locale="ru"
+                          required />
                     </label>
                     {this.state.customDays && <DaysList selectDay={this.selectDay} />}
                     <label className={styles.label}>
@@ -326,9 +286,10 @@ export default class CreateHabit extends Component {
                             onChange={this.handleChangeTime}
                             showTimeSelect
                             showTimeSelectOnly
-                            timeIntervals={15}
+                            timeIntervals={30}
                             dateFormat="LT"
-                            timeCaption="Time"
+                            timeCaption="Время"
+                            locale="ru"
                             required
                         />
                     </label>
