@@ -38,8 +38,10 @@ export default class CreateHabit extends Component {
         this.state = {
             title: '',
             category: '',
-            startDate: moment(),
-            rememberTime: moment(),
+            startDate: '',
+            rememberTime: '',
+            datePickerStartDate: moment(),
+            datePickerStartTime: moment(),
             customDays: false,
             duration: {
                 1: false,
@@ -57,11 +59,15 @@ export default class CreateHabit extends Component {
     }
 
     handleChange(date) {
-        this.setState({startDate: date});
+        const start = date.format();
+        console.log(start);
+        this.setState({datePickerStartDate: date, startDate: start });
         console.log(this.state.startDate);
     }
     handleChangeTime(date) {
-        this.setState({rememberTime: date});
+        const startTime = date.format("HH mm");
+        console.log(startTime);
+        this.setState({datePickerStartTime: date, rememberTime: startTime});
         console.log(this.state.startDate);
     }
 
@@ -193,8 +199,8 @@ export default class CreateHabit extends Component {
         const newHabit = {
             title: title,
             category: category,
-            startDate: '01.04.2018',
-            rememberTime: '04.04.2018',
+            startDate: startDate,
+            rememberTime: rememberTime,
             duration: duration
         }
         console.log('Go fetch to Base', newHabit);
@@ -202,7 +208,7 @@ export default class CreateHabit extends Component {
 
         function addHabits(userid, habit) {
           db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
-          // console.log(habit)
+          // console.log(habit);
         }
 
         addHabits(auth.currentUser.uid, newHabit);
@@ -263,11 +269,11 @@ export default class CreateHabit extends Component {
                     </div>
                     <label className={styles.label}>Начало привычки
                         <DatePicker
-                          selected={this.state.startDate}
+                          selected={this.state.datePickerStartDate}
                           onChange={this.handleChange}
-                          dateFormat="L"
-                          locale="ru"
-                          required />
+                          locale="en-gb"
+                          placeholderText="Weeks start on Monday"
+                          />
                     </label>
                     {this.state.customDays && <DaysList selectDay={this.selectDay} />}
                     <label className={styles.label}>
@@ -282,7 +288,7 @@ export default class CreateHabit extends Component {
                     <label className={styles.label}>
                         Время Напоминаний
                         <DatePicker
-                            selected={this.state.rememberTime}
+                            selected={this.state.datePickerStartTime}
                             onChange={this.handleChangeTime}
                             showTimeSelect
                             showTimeSelectOnly
