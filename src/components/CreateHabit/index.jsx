@@ -22,13 +22,13 @@ const initialState = {
     rememberTime: moment(),
     customDays: false,
     duration: {
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-        0: false
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false,
+        '6': false,
+        '0': false
     }
 };
 
@@ -44,13 +44,13 @@ export default class CreateHabit extends Component {
             datePickerStartTime: moment(),
             customDays: false,
             duration: {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false,
-                6: false,
-                0: false
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false,
+                '5': false,
+                '6': false,
+                '0': false
             }
         };
 
@@ -77,114 +77,71 @@ export default class CreateHabit extends Component {
     };
 
     checkCategory = (currentCatID, category, btnCategoryStyle, btnActive) => {
-      this.setState({category: category},
-      () => {
+        this.setState({category: category},
+        () => {
         let btnsCategory = document.querySelectorAll(`.${btnCategoryStyle}`);
+
         for (let i = 0; i < btnsCategory.length; i++ ) {
-          if (btnsCategory[i].id === currentCatID) {
+            if (btnsCategory[i].id === currentCatID) {
             btnsCategory[i].classList.toggle(btnActive);
           } else if (btnsCategory[i].classList.contains(btnActive)) {
             btnsCategory[i].classList.remove(btnActive);
           }
         }
-      });
+        });
     };
 
     getDuration = (evt) => {
         console.log(evt.target.value);
-
+        const prevDuration = this.state.duration;
+        let selectDays = false;
         switch (evt.target.value) {
             case "workDays":
-                this.setState({
-                    duration: {
-                        1: true,
-                        2: true,
-                        3: true,
-                        4: true,
-                        5: true,
-                        6: false,
-                        0: false
-                    },
-                    customDays: false,
-                });
+                for (let key in prevDuration) {
+                    if (key === "0" || key === "6") {
+                        prevDuration[key] = false;
+                    } else {
+                        prevDuration[key] = true;
+                    };
+                };
                 break;
+
             case "holydays":
-                this.setState({
-                    duration: {
-                        1: false,
-                        2: false,
-                        3: false,
-                        4: false,
-                        5: false,
-                        6: true,
-                        0: true
-                    },
-                    customDays: false,
-                });
+                for (let key in prevDuration) {
+                    if (key === "0" || key === "6") {
+                        prevDuration[key] = true;
+                    } else {
+                        prevDuration[key] = false;
+                    };
+                };
                 break;
+
             case "everyday":
-                this.setState({
-                    duration: {
-                        1: true,
-                        2: true,
-                        3: true,
-                        4: true,
-                        5: true,
-                        6: true,
-                        0: true
-                    },
-                    customDays: false,
-                });
+                for (let key in prevDuration) {
+                    prevDuration[key] = true;
+                };
                 break;
+
             case "customDays":
-                this.setState({customDays: true});
+                for (let key in prevDuration) {
+                    prevDuration[key] = false;
+                };
+                selectDays = true;
                 break;
         };
+        this.setState({ customDays: selectDays, duration: prevDuration });
         console.log(this.state.duration);
     }
 
     selectDay = (day) => {
         const dayId = day.slice(3);
-        const curDur = this.state.duration;
-        console.log(curDur);
-        switch(dayId){
-            case "0":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 0: !curDur[0] }
-                   }));
-            break;
-            case "1":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 1: !curDur[1] }
-                   }));
-            break;
-            case "2":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 2: !curDur[2] }
-                   }));
-            break;
-            case "3":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 3: !curDur[3] }
-                   }));
-            break;
-            case "4":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 4: !curDur[4] }
-                   }));
-            break;
-            case "5":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 5: !curDur[5] }
-                   }));
-            break;
-            case "6":
-            this.setState(prevState => ({
-                       duration: { ...prevState.duration, 6: !curDur[6] }
-                   }));
-            break;
-
-        };
+        const currentDuration = this.state.duration;
+        for (let key in currentDuration) {
+            if (key === dayId) {
+                currentDuration[key] = !currentDuration[key];
+            }
+        }
+        this.setState(prevState => ({ duration: currentDuration }));
     }
 
     handleSubmit = (evt) => {
@@ -255,16 +212,26 @@ export default class CreateHabit extends Component {
 
         return (<div className={styles.CreateHabit}>
 
-            <ReactModal isOpen={this.props.showModal} contentLabel="onRequestClose Example"  shouldCloseOnOverlayClick={false} className={styles.Modal} overlayClassName={styles.Overlay}>
+            <ReactModal
+                isOpen={this.props.showModal}
+                contentLabel="onRequestClose Example"
+                shouldCloseOnOverlayClick={false}
+                className={styles.Modal}
+                overlayClassName={styles.Overlay}
+                >
+
                 <button className={styles.closeBtn} onClick={this.props.handleCloseModal}>X</button>
                 <h4 className={styles.header}>Новая привычка</h4>
+
                 <form className={styles.form} noValidate onSubmit={this.handleSubmit} >
                     <input className={styles.input} id="title" placeholder="Название" required onChange={this.handleChangeTitle} />
                     <div className={styles.categoryWrapper}>
                         {
-                            habitsCategories.map(item => (<div className={styles.categoryItem} key={item.categoryName}>
+                            habitsCategories.map(item => (
+                                <div className={styles.categoryItem} key={item.categoryName}>
                                 <CategoryItem item={item} checkCategory={this.checkCategory} />
-                            </div>))
+                                </div>
+                            ))
                         }
                     </div>
                     <label className={styles.label}>Начало привычки
