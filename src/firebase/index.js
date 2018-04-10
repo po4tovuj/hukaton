@@ -1,9 +1,16 @@
-export {doCreateUserWithEmailAndPassword,
+export {auth, habitsDbRef, usersDbRef, db} from './firebase';
+export {
+    doCreateUserWithEmailAndPassword,
     doSignInWithEmailAndPassword,
     doSignOut,
+    doCheckAuth,
     doPasswordReset,
-    doPasswordUpdate } from './auth';
-
-export { auth, db } from './firebase';
-
-export { doCreateUser, onceGetUsers } from './db';
+    doPasswordUpdate,
+} from './auth';
+export {
+    writeHabitData,
+    deleteHabitData,
+    updateHabitData,
+    getDataByCategory,
+    getAllAndJoin,
+} from './habits';

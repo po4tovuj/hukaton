@@ -27,51 +27,43 @@
 }
 
 .item>.family {
-  background: url(../../images/icon-20.svg) no-repeat #fff;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: #fff url(../../images/icon-20.svg) no-repeat center;
 }
 
 .item>.health {
-  background: url(../../images/icon-28.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-28.svg) no-repeat center;
 }
 
 .item>.self {
-  background: url(../../images/icon-22.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-22.svg) no-repeat center;
 }
 
 .item>.hobbys {
-  background: url(../../images/icon-23.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-23.svg) no-repeat center;
 }
 
 .item>.environment {
-  background: url(../../images/icon-27.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-27.svg) no-repeat center;
 }
 
 .item>.finance {
-  background: url(../../images/icon-26.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-26.svg) no-repeat center;
 }
 
 .item>.carier {
-  background: url(../../images/icon-25.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-25.svg) no-repeat center;
 }
 
 .item>.voyage {
-  background: url(../../images/icon-24.svg) no-repeat;
-  background-size: 46px 46px;
-  background-position: center;
+    background-size: 46px 46px;
+    background: url(../../images/icon-24.svg) no-repeat center;
 }
 
 .item:hover>.caption {

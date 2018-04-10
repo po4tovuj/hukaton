@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.css';
+import {getDataByCategory} from "../../firebase";
 
-const Sidebar = ({match, habits})=>({
+const Sidebar = ({userId, match, habits})=>({
     render() {
         const countHabit = (category) => {
-            const counter = habits.filter(item => item.category === category);
+            console.log("trying: ", getDataByCategory(userId, category));
+            const counter = Object.values(getDataByCategory(userId, category));
             return counter.length || '0';
-        }
-
+        };
 
         return (
             <div className={styles.sidebar}>

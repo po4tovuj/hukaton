@@ -1,44 +1,213 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
-import Header from '../Header';
-import Navigation from '../Navigation';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
-import PasswordForgetPage from '../PasswordForget';
-import HomePage from '../Home';
-import AccountPage from '../Account';
-import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants/routes';
-import { onceGetUsers, auth, db } from '../../firebase';
-import data from '../Home/db.json'
-
+import Home from '../Home';
 import './index.css';
+import {
+    auth,
+    deleteHabitData,
+    doCheckAuth,
+    doSignOut,
+    habitsDbRef,
+    updateHabitData,
+    writeHabitData
+} from "../../firebase";
+import Header from "../Header";
+
+export const HabitContext = React.createContext();
+
+let INITIAL_STATE = {
+    isloading: true,
+    userId: null,
+    email: '',
+    displayName: '',
+    title: '',
+    duration: {
+        '0': false, //Sun
+        '1': false, //Mon
+        '2': false, //Tue
+        '3': false, //Wed
+        '4': false, //Thu
+        '5': false, //Fri
+        '6': false, //Sat
+    },
+    category: '',
+    startTime: '',
+    timeForRemember: '',
+    habitsDone: {},
+};
 
 class App extends React.Component {
 
-render(){
-  const userHabits = Object.values(data);
-  return (
-    <Router>
-      <div className="app">
-        <Header />
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...INITIAL_STATE,
+            habitsList: null,
+            showModal: false,
+            isAuth: false,
+        };
 
-        <hr />
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+    }
 
-        {/* <Route exact path={routes.LANDING} component={() => <LandingPage />} /> */}
-        <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
-        <Route path={routes.SIGN_UP} component={() => <SignUpPage />} />
-        <Route path={routes.HOME} render={(props) => <HomePage {...props} habits={userHabits} />} />
-        <Route path={routes.ACCOUNT} component={() => <AccountPage />} />
-        {/* <Redirect to={routes.SIGN_IN} /> */}
+    componentDidMount() {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                this.setState({
+                    isloading: false,
+                    userId: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    isAuth: true,
+                });
+                this.getHabits();
+                // getAllAndJoin(user.uid);
+            } else {
+                doSignOut();
+            }
+        });
+    };
 
+    onChange = evt => {
+        const target = evt.target;
+        const name = target.name;
+        const value = target.value;
 
-        {/* <span>Found in <a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></span> | <span>Star the <a href="https://github.com/rwieruch/react-firebase-authentication">Repository</a></span> | <span>Receive a <a href="https://www.getrevue.co/profile/rwieruch">Developer's Newsletter</a></span> */}
-      </div>
-    </Router>)
-}}
+        this.setState({
+            [name]: value,
+        });
+    };
 
-export default withAuthentication(App);
+    onSubmit = evt => {
+        evt.preventDefault();
+        const {
+            userId,
+            title,
+            category,
+            duration,
+            startTime,
+            timeForRemember,
+            habitsDone,
+        } = this.state;
+
+        writeHabitData(
+            userId,
+            title,
+            category,
+            duration,
+            startTime,
+            timeForRemember,
+            habitsDone,
+        );
+        this.setState({
+            ...INITIAL_STATE,
+            userId,
+        });
+    };
+
+    onSignOut = () => {
+        const {history} = this.props;
+        doCheckAuth(() => {
+            history.push(routes.SIGN_IN);
+        });
+        doSignOut();
+    };
+
+    onDelete = habitId => {
+        let {userId} = this.state;
+        deleteHabitData(userId, habitId);
+    };
+
+    onUpdate = (habitId, updatedData) => {
+        let {userId} = this.state;
+        updateHabitData(userId, habitId, updatedData);
+    };
+
+    initOnceOnValueListener = () => {
+        habitsDbRef.child(this.state.userId).once('value', snapshot => {
+            snapshot.val() && this.setState({habitsList: snapshot.val()});
+        });
+    };
+
+    initChildAddedListener = () => {
+        habitsDbRef
+            .child(this.state.userId)
+            .orderByKey()
+            .limitToLast(1)
+            .on('child_added', snapshot =>
+                this.setState(prevState => ({
+                    habitsList: {
+                        ...prevState.habitsList,
+                        [snapshot.key]: snapshot.val(),
+                    },
+                })),
+            );
+    };
+
+    initChildRemovedListener = () => {
+        habitsDbRef.child(this.state.userId).on('child_removed', snapshot => {
+            snapshot.val() &&
+            this.setState(prevState => {
+                const {[snapshot.key]: _, ...rest} = prevState.habitsList;
+                return {
+                    habitsList: rest,
+                };
+            });
+        });
+    };
+
+    getHabits = () => {
+        this.initOnceOnValueListener();
+        this.initChildAddedListener();
+        this.initChildRemovedListener();
+    };
+
+    handleOpenModal() {
+        this.setState({showModal: true});
+    }
+
+    handleCloseModal() {
+        this.setState({showModal: false});
+    }
+
+    render() {
+        return (
+            <Router>
+                <div className="app">
+                    <Header/>
+
+                    <hr/>
+                    <Route exact path={routes.SIGN_IN} component={SignInPage}/>
+                    <Route path={routes.SIGN_UP} component={SignUpPage}/>
+                    <HabitContext.Provider
+                        value={{
+                            userId: this.state.userId,
+                            habitsList: this.state.habitsList,
+                            title: this.state.title,
+                            timeForRemember: this.state.timeForRemember,
+                            startTime: this.state.startTime,
+                            showModal: this.state.showModal,
+                            isAuth: this.state.isAuth,
+                            onChange: this.onChange,
+                            onSubmit: this.onSubmit,
+                            onSignOut: this.onSignOut,
+                            onDelete: this.onDelete,
+                            onUpdate: this.onUpdate,
+                            handleOpenModal: this.handleOpenModal,
+                            handleCloseModal: this.handleCloseModal,
+
+                        }}
+                    >
+                        <Route path={routes.HOME} component={Home}/>
+                    </HabitContext.Provider>
+                </div>
+            </Router>
+        );
+    }
+}
+
+export default App;

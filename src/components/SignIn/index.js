@@ -1,94 +1,87 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 
-import { SignUpLink } from '../SignUp';
-import { doSignInWithEmailAndPassword } from '../../firebase';
+import {SignUpLink} from '../SignUp';
+import {doSignInWithEmailAndPassword, doCheckAuth} from '../../firebase';
 import * as routes from '../../constants/routes';
-import  styles from './styles.css';
+import styles from './styles.css';
 
 
-const SignInPage = ({ history }) =>(
-  <div>
-
-    <SignInForm history={history} />
-  </div>);
+const SignInPage = ({history}) => (
+    <div>
+        <SignInForm history={history}/>
+    </div>);
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value,
+    [propertyName]: value,
 });
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
+    email: '',
+    password: '',
+    error: null,
 };
 
 class SignInForm extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
+        this.state = {...INITIAL_STATE};
+    }
 
-    this.state = { ...INITIAL_STATE };
-  }
+    onSubmit = (event) => {
+        event.preventDefault();
+        const {
+            email,
+            password,
+        } = this.state;
 
-  onSubmit = (event) => {
-    const {
-      email,
-      password,
-    } = this.state;
+        const {
+            history,
+        } = this.props;
 
-    const {
-      history,
-    } = this.props;
+        doSignInWithEmailAndPassword(email, password);
+        doCheckAuth(() => {
+            history.push(routes.HOME);
+        });
+    };
 
-    doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routes.HOME);
-      })
-      .catch(error => {
-        this.setState(updateByPropertyName('error', error));
-      });
+    render() {
+        const {
+            email,
+            password,
+            error,
+        } = this.state;
 
-    event.preventDefault();
-  };
+        const isInvalid =
+            password === '' ||
+            email === '';
 
-  render() {
-    const {
-      email,
-      password,
-      error,
-    } = this.state;
+        return (
+            <form className={styles.form} onSubmit={this.onSubmit}>
+                <input className={styles.input}
+                       value={email}
+                       onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+                       type="text"
+                       placeholder="Email Address"
+                />
+                <input className={styles.input}
+                       value={password}
+                       onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
+                       type="password"
+                       placeholder="Password"
+                />
+                <button className={styles.button} disabled={isInvalid} type="submit">
+                    Log In
+                </button>
+                <SignUpLink/>
 
-    const isInvalid =
-      password === '' ||
-      email === '';
+                {error && <p>{error.message}</p>}
 
-    return (
-      <form className={styles.form} onSubmit={this.onSubmit}>
-        <input className={styles.input}
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input className={styles.input}
-          value={password}
-          onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <button className={styles.button} disabled={isInvalid} type="submit">
-          Log In
-        </button>
-        <SignUpLink />
-
-        { error && <p>{error.message}</p> }
-
-      </form>
-    );
-  }
+            </form>
+        );
+    }
 }
 
 export default withRouter(SignInPage);
 
-export { SignInForm };
+export {SignInForm};

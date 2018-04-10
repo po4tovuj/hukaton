@@ -24,7 +24,7 @@ const NavigationAuth = () =>(
 
 const NavigationNonAuth = () => (
         <ul>
-            {/*<li className={styles.navlist}><Link to={routes.SIGN_IN}></Link></li>*/}
+            <li className={styles.navlist}><Link to={routes.SIGN_IN}></Link></li>
         </ul>
 );
 

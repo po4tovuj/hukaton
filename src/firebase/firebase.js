@@ -1,17 +1,19 @@
 import * as firebase from 'firebase';
 
 const config = {
-    apiKey: "AIzaSyACLEwNPWiOcy2d9_RftNweEtmaLPOSb3Q",
-    authDomain: "hakaton-49ce9.firebaseapp.com",
-    databaseURL: "https://hakaton-49ce9.firebaseio.com",
-    projectId: "hakaton-49ce9",
-    storageBucket: "hakaton-49ce9.appspot.com",
-    messagingSenderId: "929597650782"
+    apiKey: "AIzaSyArsopqnR-jrcpw29ssahiPxucnbup8-74",
+    authDomain: "habits-app-fe3.firebaseapp.com",
+    databaseURL: "https://habits-app-fe3.firebaseio.com",
+    projectId: "habits-app-fe3",
+    storageBucket: "habits-app-fe3.appspot.com",
+    messagingSenderId: "913391943247",
   };
 
 firebase.initializeApp(config);
 
+export default firebase;
+
 export const auth = firebase.auth();
-export const db = firebase.database();
-// export const userId = firebase.auth().currentUser.uid;
-// console.log('userId: ', userId);
+export const db = firebase.database().ref();
+export const usersDbRef = db.child('users');
+export const habitsDbRef = db.child('habits');

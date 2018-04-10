@@ -1,15 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import styles from './styles.css';
-import { calcDay, normalizeDate } from '../DateField';
+import {calcDay, normalizeDate} from '../DateField';
+import {auth} from "../../firebase";
 
-export default class Habit extends Component {
+const Habit = (props) => {
 
-    // state = {
-    //     dayHabitState: this.props.dayHabitState,
-    //     habitsDone: this.props.habitsDone,
-    // };
+    const {index, id, title, dayHabitState, onDelete, habitsDone} = props;
 
-    handleClick = (evt) => {
+    const handleClick = (evt) => {
         let currentClass;
         if (evt.target.classList[1].slice(0, 18) === "styles__sign__todo") {
             currentClass = evt.target.classList[1];
@@ -22,45 +20,45 @@ export default class Habit extends Component {
         }
     };
 
-    handleBasketClick = (evt) => {
+    const handleBasketClick = (evt) => {
         evt.target.classList.toggle(styles.basket__orange);
+        onDelete(auth.currentUser.uid, evt.target.id);
     };
 
-    render() {
-        let day = new Date();
-        let today_1 = calcDay(day, -1);
-        let today_2 = calcDay(day, -2);
-        let today__1 = calcDay(day, +1);
-        let today__2 = calcDay(day, +2);
 
-        const handleIconStyle =(checked) =>  {
-            let style = [styles.sign];
-            this.props.dayHabitState[checked.getDay()] ? style =[...style, styles.sign__todo] : style =[...style, styles.sign__none];
-            let index = style.includes(styles.sign__todo);
+    let day = new Date();
+    let today_1 = calcDay(day, -1);
+    let today_2 = calcDay(day, -2);
+    let today__1 = calcDay(day, +1);
+    let today__2 = calcDay(day, +2);
 
-            if(checked<day && index>0 && this.props.habitsDone[normalizeDate(checked)]) {
-                style = style.slice(0, 1);
-                style = [...style, styles.sign__done];
-            } else if (checked<day && index>0 && !this.props.habitsDone[normalizeDate(checked)]){
-                style = style.slice(0, 1);
-                style = [...style, styles.sign__not_done];
-            }
-            return style.join(' ');
-        };
+    const handleIconStyle = (checked) => {
+        let style = [styles.sign];
+        dayHabitState[checked.getDay()] ? style = [...style, styles.sign__todo] : style = [...style, styles.sign__none];
+        let index = style.includes(styles.sign__todo);
 
-console.log('aaaaaa', this.props.dayHabitState);
+        if (checked < day && index > 0 && habitsDone[normalizeDate(checked)]) {
+            style = style.slice(0, 1);
+            style = [...style, styles.sign__done];
+        } else if (checked < day && index > 0 && !habitsDone[normalizeDate(checked)]) {
+            style = style.slice(0, 1);
+            style = [...style, styles.sign__not_done];
+        }
+        return style.join(' ');
+    };
 
-        return (
-            <div className={styles.wrapper}>
-                <div className={styles.number}> {this. props.index + 1} </div>
-                <div className={styles.title}>{this.props.title}</div>
-                <div className={handleIconStyle(today_2)}></div>
-                <div className={handleIconStyle(today_1)}></div>
-                <div className={handleIconStyle(day)} onClick={this.handleClick}></div>
-                <div className={handleIconStyle(today__1)}></div>
-                <div className={handleIconStyle(today__2)}></div>
-                <div className={styles.basket} onClick={this.handleBasketClick}></div>
-            </div>
-        );
-    }
+    return (
+        <div className={styles.wrapper}>
+            <div className={styles.number}> {index + 1} </div>
+            <div className={styles.title}>{title}</div>
+            <div className={handleIconStyle(today_2)}></div>
+            <div className={handleIconStyle(today_1)}></div>
+            <div className={handleIconStyle(day)} onClick={handleClick}></div>
+            <div className={handleIconStyle(today__1)}></div>
+            <div className={handleIconStyle(today__2)}></div>
+            <div className={styles.basket} id={id} onClick={handleBasketClick}></div>
+        </div>
+    );
 };
+
+export default Habit;

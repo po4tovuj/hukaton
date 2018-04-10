@@ -10,7 +10,7 @@ import CategoryItem from '../CategoryItem';
 import DaysList from '../DaysList';
 
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-import {auth, db} from "../../firebase";
+import {auth, db, writeHabitData} from "../../firebase";
 
 // let userid = auth.currentUser.uid;
 // let userid = "hsgdvgwsyfgywfgywgfey";
@@ -78,17 +78,17 @@ export default class CreateHabit extends Component {
 
     checkCategory = (currentCatID, category, btnCategoryStyle, btnActive) => {
         this.setState({category: category},
-        () => {
-        let btnsCategory = document.querySelectorAll(`.${btnCategoryStyle}`);
+            () => {
+                let btnsCategory = document.querySelectorAll(`.${btnCategoryStyle}`);
 
-        for (let i = 0; i < btnsCategory.length; i++ ) {
-            if (btnsCategory[i].id === currentCatID) {
-            btnsCategory[i].classList.toggle(btnActive);
-          } else if (btnsCategory[i].classList.contains(btnActive)) {
-            btnsCategory[i].classList.remove(btnActive);
-          }
-        }
-        });
+                for (let i = 0; i < btnsCategory.length; i++ ) {
+                    if (btnsCategory[i].id === currentCatID) {
+                        btnsCategory[i].classList.toggle(btnActive);
+                    } else if (btnsCategory[i].classList.contains(btnActive)) {
+                        btnsCategory[i].classList.remove(btnActive);
+                    }
+                }
+            });
     };
 
     getDuration = (evt) => {
@@ -149,7 +149,7 @@ export default class CreateHabit extends Component {
         if (!evt.target.checkValidity()) {
             console.log(`Not enoth data`);
             // form is invalid! so we do nothing
-        return;
+            return;
         }
         const { title, category, startDate, rememberTime, duration } = this.state;
         // form is valid! We can parse and submit data
@@ -163,12 +163,7 @@ export default class CreateHabit extends Component {
         console.log('Go fetch to Base', newHabit);
         console.log(auth.currentUser.uid);
 
-        function addHabits(userid, habit) {
-          db.ref().child("habits").child(`${userid}`).push(habit).catch(err => console.log(err));
-          // console.log(habit);
-        }
-
-        addHabits(auth.currentUser.uid, newHabit);
+        writeHabitData(auth.currentUser.uid, newHabit);
         this.setState(initialState, () => (console.log(`ClearState`, this.state)));
         this.props.handleCloseModal();
     }
@@ -218,7 +213,7 @@ export default class CreateHabit extends Component {
                 shouldCloseOnOverlayClick={false}
                 className={styles.Modal}
                 overlayClassName={styles.Overlay}
-                >
+            >
 
                 <button className={styles.closeBtn} onClick={this.props.handleCloseModal}>X</button>
                 <h4 className={styles.header}>Новая привычка</h4>
@@ -229,18 +224,18 @@ export default class CreateHabit extends Component {
                         {
                             habitsCategories.map(item => (
                                 <div className={styles.categoryItem} key={item.categoryName}>
-                                <CategoryItem item={item} checkCategory={this.checkCategory} />
+                                    <CategoryItem item={item} checkCategory={this.checkCategory} />
                                 </div>
                             ))
                         }
                     </div>
                     <label className={styles.label}>Начало привычки
                         <DatePicker
-                          selected={this.state.datePickerStartDate}
-                          onChange={this.handleChange}
-                          locale="en-gb"
-                          placeholderText="Weeks start on Monday"
-                          />
+                            selected={this.state.datePickerStartDate}
+                            onChange={this.handleChange}
+                            locale="en-gb"
+                            placeholderText="Weeks start on Monday"
+                        />
                     </label>
                     {this.state.customDays && <DaysList selectDay={this.selectDay} />}
                     <label className={styles.label}>

@@ -1,24 +1,20 @@
 import React from 'react';
 import styles from './styles.css';
 
-const CategoryItem = ({ item, checkCategory}) => {
+const CategoryItem = ({categoryName, icon, checkCategory, categoryId }) => {
     const handleClick = (evt) => {
         evt.preventDefault();
-        const currentCatID = evt.target.id;
-        const btnCategoryStyle = styles.btn;
+        const category = categoryId;
         const btnActive = styles.btnActive;
-        const category = item.category;
-        checkCategory(currentCatID, category, btnCategoryStyle, btnActive);
+        checkCategory(category, btnActive);
     };
-    const btnStyle = `${styles.btn} ${styles[item.category]}`;
 
     return (
-      <div className={styles.item} >
-        <button className={btnStyle} onClick={handleClick} id={item.categoryId} >
-        </button>
-        <p className={styles.caption}>{item.categoryName}</p>
-      </div>
-    )
-};
+<button className={styles.item} onClick={handleClick} id={categoryId} >
+            <img src={icon} alt={categoryName} title="Выбрать категорию {categoryName}" className={styles.img} />
+            <p className={styles.caption} >{categoryName}</p>
+</button>
+
+)};
 
 export default CategoryItem;
