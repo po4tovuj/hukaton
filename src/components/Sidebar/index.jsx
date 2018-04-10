@@ -6,9 +6,9 @@ import {getDataByCategory} from "../../firebase";
 const Sidebar = ({userId, match, habits})=>({
     render() {
         const countHabit = (category) => {
-            console.log("trying: ", getDataByCategory(userId, category));
-            const counter = Object.values(getDataByCategory(userId, category));
-            return counter.length || '0';
+            return getDataByCategory(userId, category)!==undefined
+                ? Object.values(getDataByCategory(userId, category)).length
+                : '0';
         };
 
         return (
@@ -49,10 +49,6 @@ const Sidebar = ({userId, match, habits})=>({
                     <li className={styles.category__item} id="category-travels"><NavLink to={`${match.url}/travels`} >
                         # Путешествия
                         </NavLink><span className={styles.counter}>{countHabit('travels')}</span>
-                    </li>
-                    <li className={styles.category__item} id="category-all"><NavLink to={`${match.url}/all`} >
-                        # Все
-                        </NavLink><span className={styles.counter}>{habits.length}</span>
                     </li>
                 </ul>
                 <li className={styles.category}>Сегодня</li>

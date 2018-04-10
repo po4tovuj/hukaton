@@ -7,6 +7,7 @@ export const writeHabitData = (userId,
     let newHabit = {
         ...habit,
         habitId,
+        // habitsDone: {"0904": true},
     };
 
     return habitsDbRef.child(userId + '/' + habit.category + '/' + habitId).set(newHabit);
@@ -24,10 +25,10 @@ export const updateHabitData = (userId, habitId, updatedData) => {
 
 export const getDataByCategory = (userId, category) => {
     habitsDbRef.child(userId + '/' + category).once('value', snap => {
-        return snap && snap.val() || {};
+        // console.log('category => ', category, ' => ', snap.val());
+        return snap.val();
     });
 };
-
 // export const getAllAndJoin = userId =>
 //   habitsDbRef.child(userId).once('value', snap => {
 //     return Object.values(snap.val()).reduce((acc, cur) => {

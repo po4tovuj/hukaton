@@ -5,7 +5,8 @@ import {auth} from "../../firebase";
 
 const Habit = (props) => {
 
-    const {index, id, title, dayHabitState, onDelete, habitsDone} = props;
+    const {index, id, habitObj, onDelete} = props;
+    const { title, category, duration, habitsDone, startDate } = habitObj;
 
     const handleClick = (evt) => {
         let currentClass;
@@ -22,7 +23,7 @@ const Habit = (props) => {
 
     const handleBasketClick = (evt) => {
         evt.target.classList.toggle(styles.basket__orange);
-        onDelete(auth.currentUser.uid, evt.target.id);
+        onDelete(auth.currentUser.uid, category + '/' + evt.target.id);
     };
 
 
@@ -34,16 +35,23 @@ const Habit = (props) => {
 
     const handleIconStyle = (checked) => {
         let style = [styles.sign];
-        dayHabitState && dayHabitState[checked.getDay()] ? style = [...style, styles.sign__todo] : style = [...style, styles.sign__none];
-        // let index = style.includes(styles.sign__todo);
 
-        // if (checked < day && index > 0 && habitsDone[normalizeDate(checked)]) {
-        //     style = style.slice(0, 1);
-        //     style = [...style, styles.sign__done];
-        // } else if (checked < day && index > 0 && !habitsDone[normalizeDate(checked)]) {
-        //     style = style.slice(0, 1);
-        //     style = [...style, styles.sign__not_done];
-        // }
+        startDate <= Date.parse(checked) && duration && duration[checked.getDay()]
+            ? style = [...style, styles.sign__todo]
+            : style = [...style, styles.sign__none];
+
+        let index = style.includes(styles.sign__todo);
+
+        let habitWasMade = !!(habitsDone && Object.keys(habitsDone).includes(normalizeDate(checked)) >= 0);
+        // console.log(habitWasMade);
+
+        if (checked < day && index > 0 && habitWasMade) {
+            style = style.slice(0, 1);
+            style = [...style, styles.sign__done];
+        } else if (checked < day && index > 0) {
+            style = style.slice(0, 1);
+            style = [...style, styles.sign__not_done];
+        }
         return style.join(' ');
     };
 

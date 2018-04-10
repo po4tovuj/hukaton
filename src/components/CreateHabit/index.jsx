@@ -59,16 +59,16 @@ export default class CreateHabit extends Component {
     }
 
     handleChange(date) {
-        const start = date.format();
-        console.log(start);
-        this.setState({datePickerStartDate: date, startDate: start });
+        const start = date._d;
+        const startInMsec = Date.parse(start);
+        this.setState({datePickerStartDate: date, startDate: startInMsec });
         console.log(this.state.startDate);
     }
     handleChangeTime(date) {
         const startTime = date.format("HH mm");
         console.log(startTime);
         this.setState({datePickerStartTime: date, rememberTime: startTime});
-        console.log(this.state.startDate);
+        console.log(this.state.rememberTime);
     }
 
     handleChangeTitle = (evt) => {

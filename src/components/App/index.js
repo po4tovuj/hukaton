@@ -28,7 +28,6 @@ let INITIAL_STATE = {
     category: '',
     startTime: '',
     timeForRemember: '',
-    habitsDone: {},
 };
 
 class App extends React.Component {
@@ -41,6 +40,7 @@ class App extends React.Component {
             showModal: false,
             isAuth: false,
             chosenCategory: '',
+            habitsDone: null,
         };
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -174,11 +174,6 @@ class App extends React.Component {
         return (
             <Router>
                 <div className="app">
-                    <Header/>
-
-                    <hr/>
-                    <Route exact path={routes.SIGN_IN} component={SignInPage}/>
-                    <Route path={routes.SIGN_UP} component={SignUpPage}/>
                     <HabitContext.Provider
                         value={{
                             userId: this.state.userId,
@@ -198,6 +193,11 @@ class App extends React.Component {
 
                         }}
                     >
+                    <Header/>
+                    <hr/>
+                    <Route exact path={routes.SIGN_IN} component={SignInPage}/>
+                    <Route path={routes.SIGN_UP} component={SignUpPage}/>
+
                         <Route path={routes.HOME} component={Home}/>
                     </HabitContext.Provider>
                 </div>
