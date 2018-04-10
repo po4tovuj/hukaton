@@ -2,22 +2,15 @@ import {habitsDbRef} from './firebase';
 
 export const writeHabitData = (userId,
                                habit) => {
-
-    let categoryIndex = Object.values(habit.category).filter((item, index) => {return item===true && index});
-    let category = Object.keys(habit.category)[categoryIndex];
-    console.log('category to base: ', category);
-
-    let habitId = habitsDbRef.child(userId + '/' + category).push().key;
+    let habitId = habitsDbRef.child(userId + '/' + habit.category).push().key;
 
     let newHabit = {
         ...habit,
         habitId,
     };
-    console.log('habit.category: ', habit.category);
 
-    return habitsDbRef.child(userId + '/' + category + '/' + habitId).set(newHabit);
+    return habitsDbRef.child(userId + '/' + habit.category + '/' + habitId).set(newHabit);
 };
-
 export const deleteHabitData = (userId, habitId) => {
     habitsDbRef
         .child(userId + '/' + habitId)
