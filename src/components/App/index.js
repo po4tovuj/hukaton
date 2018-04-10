@@ -24,15 +24,7 @@ let INITIAL_STATE = {
     email: '',
     displayName: '',
     title: '',
-    duration: {
-        '0': false, //Sun
-        '1': false, //Mon
-        '2': false, //Tue
-        '3': false, //Wed
-        '4': false, //Thu
-        '5': false, //Fri
-        '6': false, //Sat
-    },
+    duration: null,
     category: '',
     startTime: '',
     timeForRemember: '',
@@ -48,6 +40,7 @@ class App extends React.Component {
             habitsList: null,
             showModal: false,
             isAuth: false,
+            chosenCategory: '',
         };
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -128,14 +121,16 @@ class App extends React.Component {
     };
 
     initOnceOnValueListener = () => {
-        habitsDbRef.child(this.state.userId).once('value', snapshot => {
+        let category = this.state.chosenCategory || 'family';
+        habitsDbRef.child(this.state.userId +'/' + category).once('value', snapshot => {
             snapshot.val() && this.setState({habitsList: snapshot.val()});
         });
     };
 
     initChildAddedListener = () => {
+        let category = this.state.chosenCategory || 'family';
         habitsDbRef
-            .child(this.state.userId)
+            .child(this.state.userId +'/' + category)
             .orderByKey()
             .limitToLast(1)
             .on('child_added', snapshot =>
@@ -149,7 +144,8 @@ class App extends React.Component {
     };
 
     initChildRemovedListener = () => {
-        habitsDbRef.child(this.state.userId).on('child_removed', snapshot => {
+        let category = this.state.chosenCategory || 'family';
+        habitsDbRef.child(this.state.userId +'/' + category).on('child_removed', snapshot => {
             snapshot.val() &&
             this.setState(prevState => {
                 const {[snapshot.key]: _, ...rest} = prevState.habitsList;

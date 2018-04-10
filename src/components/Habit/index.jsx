@@ -34,16 +34,16 @@ const Habit = (props) => {
 
     const handleIconStyle = (checked) => {
         let style = [styles.sign];
-        dayHabitState[checked.getDay()] ? style = [...style, styles.sign__todo] : style = [...style, styles.sign__none];
-        let index = style.includes(styles.sign__todo);
+        dayHabitState && dayHabitState[checked.getDay()] ? style = [...style, styles.sign__todo] : style = [...style, styles.sign__none];
+        // let index = style.includes(styles.sign__todo);
 
-        if (checked < day && index > 0 && habitsDone[normalizeDate(checked)]) {
-            style = style.slice(0, 1);
-            style = [...style, styles.sign__done];
-        } else if (checked < day && index > 0 && !habitsDone[normalizeDate(checked)]) {
-            style = style.slice(0, 1);
-            style = [...style, styles.sign__not_done];
-        }
+        // if (checked < day && index > 0 && habitsDone[normalizeDate(checked)]) {
+        //     style = style.slice(0, 1);
+        //     style = [...style, styles.sign__done];
+        // } else if (checked < day && index > 0 && !habitsDone[normalizeDate(checked)]) {
+        //     style = style.slice(0, 1);
+        //     style = [...style, styles.sign__not_done];
+        // }
         return style.join(' ');
     };
 
