@@ -19,8 +19,8 @@ export const deleteHabitData = (userId, habitId) => {
         .catch(err => console.log(err));
 };
 
-export const updateHabitData = (userId, habitId, updatedData) => {
-    return habitsDbRef.child(userId + '/' + habitId).update(updatedData);
+export const updateHabitData = (userId, category, habitId, updatedData) => {
+    return habitsDbRef.child(userId + '/' + category + '/' + habitId).update(updatedData);
 };
 
 export const getDataByCategory = (userId, category) => {
