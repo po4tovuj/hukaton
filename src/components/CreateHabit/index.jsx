@@ -18,8 +18,8 @@ ReactModal.setAppElement('#root');
 const initialState = {
     title: '',
     category: '',
-    startDate: moment(),
-    rememberTime: moment(),
+    startDate: '',
+    rememberTime: '',
     customDays: false,
     duration: {
         '1': false,
@@ -59,8 +59,10 @@ export default class CreateHabit extends Component {
     }
 
     handleChange(date) {
-        const start = date._d;
+        const start = date.format('LL');
+        console.log(start);
         const startInMsec = Date.parse(start);
+        console.log(startInMsec);
         this.setState({datePickerStartDate: date, startDate: startInMsec });
         console.log(this.state.startDate);
     }

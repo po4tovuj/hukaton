@@ -17,7 +17,7 @@ const Home = (props) => (
                 ? (
                     <div className={styles.habit}>
                         {/* <Sidebar {...this.props} habits={data} /> */}
-                        {/*<Sidebar {...props} userId={userId}  habits={habitsList}/>*/}
+                        <Sidebar {...props} userId={userId}  habits={habitsList}/>
 
                         <div className={styles.wrapper}>
                             <NewHabit handleOpenModal={handleOpenModal}/>

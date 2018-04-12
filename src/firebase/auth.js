@@ -24,6 +24,7 @@ export const doSignInWithEmailAndPassword = (email, password) => {
 
 // Sign out
 export const doSignOut = () => {
+    console.log('pressed sign out button');
     auth
         .signOut()
         .catch(error => console.log(error));
