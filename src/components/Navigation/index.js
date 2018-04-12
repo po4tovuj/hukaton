@@ -1,18 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.css';
-import AuthUserContext from '../Session/AuthUserContext';
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants/routes';
 import { Ava } from '../Avatar';
 import HomeBtn from  '../HomeButton';
+import {HabitContext} from '../App';
+import withAuthorzation from '../Session/withAuthorization'
+
+
 const Navigation = () =>
-  <AuthUserContext.Consumer>
-    {authUser => authUser
-      ? <NavigationAuth />
-      : <NavigationNonAuth />
-    }
-  </AuthUserContext.Consumer>
+
+  <HabitContext.Consumer>
+      {isAuth =>
+          isAuth
+              ? <NavigationAuth />
+              : <withAuthorization />
+      }
+  </HabitContext.Consumer>;
 
 const NavigationAuth = () =>(
   <ul className={styles.ul}>

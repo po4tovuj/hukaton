@@ -174,9 +174,8 @@ class App extends React.Component {
         return (
             <Router>
                 <div className="app">
-                    <Header/>
 
-                    <hr/>
+
                     <Route exact path={routes.SIGN_IN} component={SignInPage}/>
                     <Route path={routes.SIGN_UP} component={SignUpPage}/>
                     <HabitContext.Provider
@@ -198,6 +197,7 @@ class App extends React.Component {
 
                         }}
                     >
+                        <Header/>
                         <Route path={routes.HOME} component={Home}/>
                     </HabitContext.Provider>
                 </div>
