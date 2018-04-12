@@ -1,217 +1,214 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
-import * as routes from '../../constants/routes';
 import Home from '../Home';
-import './index.css';
+import Header from '../Header';
+import * as routes from '../../constants/routes';
 import {
-    auth,
-    deleteHabitData,
-    doCheckAuth,
-    doSignOut,
-    habitsDbRef,
-    updateHabitData,
-    writeHabitData
-} from "../../firebase";
-import Header from "../Header";
+  deleteHabitData,
+  initAuthStateListener,
+  doSignOut,
+  habitsDbRef,
+  updateHabitData,
+  writeHabitData,
+} from '../../firebase';
+import './index.css';
 
 export const HabitContext = React.createContext();
 
-let INITIAL_STATE = {
-    isloading: true,
-    userId: null,
-    email: '',
-    displayName: '',
-    title: '',
-    duration: null,
-    category: '',
-    startTime: '',
-    timeForRemember: '',
+const INITIAL_STATE = {
+  isloading: false,
+  userId: null,
+  email: '',
+  displayName: '',
+  title: '',
+  duration: null,
+  category: '',
+  startTime: '',
+  timeForRemember: '',
+  isAuth: false,
 };
 
+// TODO: вынести хобитов в Home
 class App extends React.Component {
+  state = {
+    ...INITIAL_STATE,
+    habitsList: null,
+    showModal: false,
+    chosenCategory: '',
+    habitsDone: null,
+    habitsCounter: {
+      family: '0',
+      health: '0',
+      'self-development': '0',
+      hobbys: '0',
+      environment: '0',
+      finance: '0',
+      carier: '0',
+      voyage: '0',
+    },
+  };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...INITIAL_STATE,
-            habitsList: null,
-            showModal: false,
-            isAuth: false,
-            chosenCategory: '',
-            habitsDone: null,
-            habitsCounter: {
-                'family': '0',
-                'health': '0',
-                'self-development': '0',
-                'hobbys': '0',
-                'environment': '0',
-                'finance': '0',
-                'carier': '0',
-                'voyage': '0'
-            },
-        };
+  componentDidMount() {
+    initAuthStateListener(this.onSignIn, this.onSignOut);
+  }
 
-        this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
-    }
+  onSignIn = user => {
+    this.setState({
+      isloading: false,
+      userId: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      isAuth: true,
+    });
+    this.getHabits();
+  };
 
-    componentDidMount() {
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                this.setState({
-                    isloading: false,
-                    userId: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    isAuth: true,
-                });
-                this.getHabits();
-                // getAllAndJoin(user.uid);
-            } else {
-                doSignOut();
-            }
-        });
-    };
+  onSignOut = () => {
+    doSignOut().then(() => {
+      console.log('doSignOut then');
+      this.setState({ ...INITIAL_STATE }, () =>
+        this.props.history.push(routes.SIGN_IN),
+      );
+    });
+  };
 
-    onChange = evt => {
-        const target = evt.target;
-        const name = target.name;
-        const value = target.value;
+  onChange = evt => {
+    const target = evt.target;
+    const name = target.name;
+    const value = target.value;
 
-        this.setState({
-            [name]: value,
-        });
-    };
+    this.setState({
+      [name]: value,
+    });
+  };
 
-    onSubmit = evt => {
-        evt.preventDefault();
-        const {
-            userId,
-            title,
-            category,
-            duration,
-            startTime,
-            timeForRemember,
-            habitsDone,
-        } = this.state;
+  onSubmit = evt => {
+    evt.preventDefault();
+    const {
+      userId,
+      title,
+      category,
+      duration,
+      startTime,
+      timeForRemember,
+      habitsDone,
+    } = this.state;
 
-        writeHabitData(
-            userId,
-            title,
-            category,
-            duration,
-            startTime,
-            timeForRemember,
-            habitsDone,
-        );
-        this.setState({
-            ...INITIAL_STATE,
-            userId,
-        });
-    };
+    writeHabitData(
+      userId,
+      title,
+      category,
+      duration,
+      startTime,
+      timeForRemember,
+      habitsDone,
+    );
+    this.setState({
+      ...INITIAL_STATE,
+      userId,
+    });
+  };
 
-    onSignOut = () => {
-        const {history} = this.props;
-        doCheckAuth(() => {
-            history.push(routes.SIGN_IN);
-        });
-        doSignOut();
-    };
+  onDelete = habitId => {
+    const { userId } = this.state;
+    deleteHabitData(userId, habitId);
+  };
 
-    onDelete = habitId => {
-        let {userId} = this.state;
-        deleteHabitData(userId, habitId);
-    };
+  onUpdate = (habitId, updatedData) => {
+    const { userId } = this.state;
+    updateHabitData(userId, habitId, updatedData);
+  };
 
-    onUpdate = (habitId, updatedData) => {
-        let {userId} = this.state;
-        updateHabitData(userId, habitId, updatedData);
-    };
+  initOnceOnValueListener = () => {
+    const category = this.state.chosenCategory || 'family';
 
-    initOnceOnValueListener = () => {
-        let category = this.state.chosenCategory || 'family';
-        habitsDbRef.child(this.state.userId +'/' + category).once('value', snapshot => {
-            snapshot.val() && this.setState({habitsList: snapshot.val()});
-        });
-    };
+    habitsDbRef
+      .child(this.state.userId + '/' + category)
+      .once('value', snapshot => {
+        snapshot.val() && this.setState({ habitsList: snapshot.val() });
+      });
+  };
 
-    initChildAddedListener = () => {
-        let category = this.state.chosenCategory || 'family';
-        habitsDbRef
-            .child(this.state.userId +'/' + category)
-            .orderByKey()
-            .limitToLast(1)
-            .on('child_added', snapshot =>
-                this.setState(prevState => ({
-                    habitsList: {
-                        ...prevState.habitsList,
-                        [snapshot.key]: snapshot.val(),
-                    },
-                })),
-            );
-    };
+  initChildAddedListener = () => {
+    let category = this.state.chosenCategory || 'family';
 
-    initChildRemovedListener = () => {
-        let category = this.state.chosenCategory || 'family';
-        habitsDbRef.child(this.state.userId +'/' + category).on('child_removed', snapshot => {
-            snapshot.val() &&
-            this.setState(prevState => {
-                const {[snapshot.key]: _, ...rest} = prevState.habitsList;
-                return {
-                    habitsList: rest,
-                };
-            });
-        });
-    };
+    habitsDbRef
+      .child(this.state.userId + '/' + category)
+      .orderByKey()
+      .limitToLast(1)
+      .on('child_added', snapshot =>
+        this.setState(prevState => ({
+          habitsList: {
+            ...prevState.habitsList,
+            [snapshot.key]: snapshot.val(),
+          },
+        })),
+      );
+  };
 
-    getHabits = () => {
-        this.initOnceOnValueListener();
-        this.initChildAddedListener();
-        this.initChildRemovedListener();
-    };
+  initChildRemovedListener = () => {
+    let category = this.state.chosenCategory || 'family';
 
-    handleOpenModal() {
-        this.setState({showModal: true});
-    }
+    habitsDbRef
+      .child(this.state.userId + '/' + category)
+      .on('child_removed', snapshot => {
+        snapshot.val() &&
+          this.setState(prevState => {
+            const { [snapshot.key]: _, ...rest } = prevState.habitsList;
+            return {
+              habitsList: rest,
+            };
+          });
+      });
+  };
 
-    handleCloseModal() {
-        this.setState({showModal: false});
-    }
+  getHabits = () => {
+    this.initOnceOnValueListener();
+    this.initChildAddedListener();
+    this.initChildRemovedListener();
+  };
 
-    render() {
-        return (
-            <Router>
-                <div className="app">
-                    <HabitContext.Provider
-                        value={{
-                            userId: this.state.userId,
-                            habitsList: this.state.habitsList,
-                            title: this.state.title,
-                            timeForRemember: this.state.timeForRemember,
-                            startTime: this.state.startTime,
-                            showModal: this.state.showModal,
-                            isAuth: this.state.isAuth,
-                            onChange: this.onChange,
-                            onSubmit: this.onSubmit,
-                            onSignOut: this.onSignOut,
-                            onDelete: this.onDelete,
-                            onUpdate: this.onUpdate,
-                            handleOpenModal: this.handleOpenModal,
-                            handleCloseModal: this.handleCloseModal,
-                        }}
-                    >
-                    <Header/>
-                    <Route exact path={routes.SIGN_IN} component={SignInPage}/>
-                    <Route path={routes.SIGN_UP} component={SignUpPage}/>
+  handleOpenModal = () => {
+    this.setState({ showModal: true });
+  };
 
-                        <Route path={routes.HOME} component={Home}/>
-                    </HabitContext.Provider>
-                </div>
-            </Router>
-        );
-    }
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
+  render() {
+    // FIXME: Вынести все что связано с Habits на страницу Home.
+    // Сделать Home умным и хранить стейт там.
+    const { isAuth } = this.state;
+
+    return (
+      <div className="app">
+        <HabitContext.Provider
+          value={{
+            ...this.state,
+            onChange: this.onChange,
+            onSubmit: this.onSubmit,
+            onSignOut: this.onSignOut,
+            onDelete: this.onDelete,
+            onUpdate: this.onUpdate,
+            handleOpenModal: this.handleOpenModal,
+            handleCloseModal: this.handleCloseModal,
+          }}>
+          <Header />
+
+          <Switch>
+            {!isAuth && (
+              <Route exact path={routes.SIGN_IN} component={SignInPage} />
+            )}
+            {!isAuth && <Route path={routes.SIGN_UP} component={SignUpPage} />}
+            {isAuth && <Route path={routes.HOME} component={Home} />}
+          </Switch>
+        </HabitContext.Provider>
+      </div>
+    );
+  }
 }
 
 export default App;

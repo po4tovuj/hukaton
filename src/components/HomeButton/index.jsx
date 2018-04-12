@@ -1,12 +1,12 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import  styles from '../../styles/theme.css';
-import {HOME} from "../../constants/routes";
+import { Link } from 'react-router-dom';
+import styles from '../../styles/theme.css';
+import { HOME } from '../../constants/routes';
 
-const goHome = () => (window.location = '/home');
 const homeBtn = () => (
-    <button className={styles.btnLogout} type="button" onClick={ goHome } >
-        HOME
-    </button>);
+  <Link to={HOME} className={styles.btnLogout}>
+    HOME
+  </Link>
+);
 
- export default homeBtn;
+export default homeBtn;
