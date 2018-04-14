@@ -1,19 +1,29 @@
 .wrapper {
     display: flex;
     justify-content: space-between;
-    width: 43%;
+    width: 100%;
     height: 30px;
-    margin-left: 47%;
-    margin-right: 10%;
     line-height: 30px;
     color: #757575;
 }
 
+.num{
+    flex: 0 0 30px;
+}
+
+.title{
+    width: 40%;
+}
+
 .day {
-    width: 19%;
+    flex: 0 0 82px;
     text-align: center;
 }
 
-.day:nth-child(3){
-    background-color: #f3f4fb;
+.day:nth-child(5){
+    background-color: #efefff; /*#f3f4fb*/
+}
+
+.basket{
+    flex: 0 0 82px;
 }
