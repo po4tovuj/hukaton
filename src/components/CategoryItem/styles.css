@@ -38,7 +38,7 @@
   background-position: center;
 }
 
-.item>.self {
+.item>.self-development {
   background: url(../../images/icon-22.svg) no-repeat;
   background-size: 46px 46px;
   background-position: center;
@@ -62,7 +62,7 @@
   background-position: center;
 }
 
-.item>.carier {
+.item>.carrier {
   background: url(../../images/icon-25.svg) no-repeat;
   background-size: 46px 46px;
   background-position: center;

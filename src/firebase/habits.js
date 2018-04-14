@@ -7,7 +7,6 @@ export const writeHabitData = (userId,
     let newHabit = {
         ...habit,
         habitId,
-        // habitsDone: {"0904": true},
     };
 
     return habitsDbRef.child(userId + '/' + habit.category + '/' + habitId).set(newHabit);
@@ -25,7 +24,8 @@ export const updateHabitData = (userId, category, habitId, updatedData) => {
 
 export const getDataByCategory = (userId, category) => {
     habitsDbRef.child(userId + '/' + category).once('value', snap => {
-        // console.log('category => ', category, ' => ', snap.val());
+        console.log('answer in firebase => ', snap.val());
+
         return snap.val();
     });
 };

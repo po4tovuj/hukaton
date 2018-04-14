@@ -161,6 +161,7 @@ export default class CreateHabit extends Component {
     writeHabitData(auth.currentUser.uid, newHabit);
     this.setState(initialState, () => console.log(`ClearState`, this.state));
     this.props.handleCloseModal();
+    this.props.onCategoryClick(category);
   };
 
   render() {
@@ -176,7 +177,7 @@ export default class CreateHabit extends Component {
         categoryName: 'Здоровье',
       },
       {
-        category: 'self',
+        category: 'self-development',
         categoryId: 2,
         categoryName: 'Саморазвитие',
       },
@@ -196,7 +197,7 @@ export default class CreateHabit extends Component {
         categoryName: 'Финансы',
       },
       {
-        category: 'carier',
+        category: 'carrier',
         categoryId: 6,
         categoryName: 'Карьера',
       },
