@@ -37,8 +37,7 @@ const categories = [
     },
 ];
 
-const Sidebar = ({userId, match, habitsCounter, onCategoryClick, onGetAllClick}) => ({
-    render() {
+const Sidebar = ({userId, match, habitsCounter, onCategoryClick, onGetAllClick}) => {
 
         return (
             <section className={styles.sidebar}>
@@ -72,7 +71,6 @@ const Sidebar = ({userId, match, habitsCounter, onCategoryClick, onGetAllClick})
                 </NavLink>
             </section>
         );
-    },
-});
+};
 
 export default Sidebar;
