@@ -44,8 +44,8 @@ class App extends React.Component {
   onSignOut = () => {
     doSignOut().then(() => {
       console.log('doSignOut then');
-      this.setState({ ...INITIAL_STATE },// () =>
-        // this.props.history.push(routes.SIGN_IN),
+      this.setState({ ...INITIAL_STATE }//, () =>
+        //this.props.history.push(routes.SIGN_IN),
       );
     });
   };
@@ -53,7 +53,7 @@ class App extends React.Component {
 
   render() {
     const { isAuth } = this.state;
-    console.log('isAuth: ', isAuth);
+    console.log('isAuth app: ', isAuth);
 
     return (
       <div className="app">
@@ -69,9 +69,9 @@ class App extends React.Component {
             {!isAuth && <Route path={routes.SIGN_UP} component={SignUpPage} />}
             {isAuth && <Route path={routes.HOME} component={Habits} />} */}
 
-            <PrivateRoute path={routes.SIGN_IN} isAuth={!isAuth} component={SignInPage} redirectTo={routes.HOME} />
+            <PrivateRoute exact path={routes.SIGN_IN} isAuth={!isAuth} component={SignInPage} redirectTo={routes.HOME} />
             <PrivateRoute path={routes.SIGN_UP} isAuth={!isAuth} component={SignUpPage} redirectTo={routes.HOME} />
-            <PrivateRoute exact path={routes.HOME} isAuth={isAuth} component={Habits} redirectTo={routes.SIGN_IN} />
+            <PrivateRoute path={routes.HOME} isAuth={isAuth} component={Habits} redirectTo={routes.SIGN_IN} />
           </Switch>
         </HabitContext.Provider>
       </div>

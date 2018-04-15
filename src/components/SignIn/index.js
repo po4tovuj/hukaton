@@ -34,9 +34,9 @@ class SignInForm extends Component {
 
     const { history } = this.props;
 
-    doSignInWithEmailAndPassword(email, password).then(() =>
-      history.push(routes.HOME),
-    );
+    doSignInWithEmailAndPassword(email, password)//.then(() =>
+      // history.push(routes.HOME),
+    // );
   };
 
   render() {

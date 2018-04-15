@@ -7,14 +7,15 @@ const PrivateRoute = ({
   redirectTo,
   ...rest,
 }) => {
-  console.log('isAuth: ', isAuth);
+  console.log('isAuth private: ', isAuth);
   return <Route {...rest} render={props => isAuth
     ? <Component {...props} />
-    : <Redirect to={{
-          pathName: redirectTo,
-          state: { from: props.location },
-        }}
-      />
+    : <Redirect from={props.location.pathname} to={redirectTo} />
+    // : <Redirect to={{
+    //       pathName: redirectTo,
+    //       state: { from: props.location },
+    //     }}
+    //   />
   }/>
 };
 
