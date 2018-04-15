@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 import styles from './styles.css';
-import {getDataByCategory} from '../../firebase';
 
 const categories = [
     {
@@ -40,8 +39,8 @@ const categories = [
 
 const Sidebar = ({userId, match, habitsCounter, onCategoryClick}) => ({
     render() {
+        // console.log('habitsCounter => ', habitsCounter); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // TODO: на кой ляд тут id
         return (
             <section className={styles.sidebar}>
                 <h2 className={styles.title}>Привычки</h2>
@@ -50,13 +49,10 @@ const Sidebar = ({userId, match, habitsCounter, onCategoryClick}) => ({
                         <li
                             key={c.name}
                             className={styles.category__item}
-                            id={`category-${c.name}`}
                             onClick={()=> onCategoryClick(c.name)}
                         >
                             {/* FIXME: заменить ID на query string
-              Но сначала вынести все в Home
-                https://www.npmjs.com/package/query-string
-              */}
+                https://www.npmjs.com/package/query-string*/}
                             <NavLink
                                 to={{
                                     pathname: `${match.url}/${c.name}`,

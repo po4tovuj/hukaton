@@ -48,7 +48,7 @@ export default class Habit extends Component {
 
         const handleBasketClick = (evt) => {
             evt.target.classList.toggle(styles.basket__orange);
-            onDelete(auth.currentUser.uid, category + '/' + evt.target.id);
+            onDelete(auth.currentUser.uid, category, category + '/' + evt.target.id);
         };
 
         const handleIconStyle = (checkedDate) => {

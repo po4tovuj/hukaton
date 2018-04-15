@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.css';
 
 const CategoryItem = ({ item, active, checkCategory }) => {
-  console.log(active);
+  // console.log(active);
 
   // FIXME: пофиксить логику, заменить просто на active проп вот это
   const handleClick = evt => {

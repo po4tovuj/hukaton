@@ -15,6 +15,17 @@ const INITIAL_STATE = {
     startTime: '',
     timeForRemember: '',
     habitsList: null,
+    habitsCounter: {
+        'family': 0,
+        'health': 0,
+        'self-development': 0,
+        'hobbys': 0,
+        'environment': 0,
+        'finance': 0,
+        'carrier': 0,
+        'voyage': 0,
+    },
+
 };
 
 export default class Habits extends Component {
@@ -24,16 +35,6 @@ export default class Habits extends Component {
         showModal: false,
         chosenCategory: '' || 'family',
         habitsDone: null,
-        habitsCounter: {
-            'family': 0,
-            'health': 0,
-            'self-development': 0,
-            'hobbys': 0,
-            'environment': 0,
-            'finance': 0,
-            'carrier': 0,
-            'voyage': 0,
-        },
     };
 
     handleOpenModal = () => {
@@ -50,12 +51,25 @@ export default class Habits extends Component {
     }
 
     componentDidUpdate(nextProps, nextState) {
-        nextState.chosenCategory !== this.state.chosenCategory
-        && this.initOnceOnValueListener();
+        nextState.chosenCategory !== this.state.chosenCategory && this.initOnceOnValueListener();
     }
+
+    createHabitsCounter = () => {
+        habitsDbRef.child(this.state.userId + '/habitsCounter').set({
+            ...INITIAL_STATE.habitsCounter,
+        });
+    };
 
     initOnceOnValueListener = () => {
         const category = this.state.chosenCategory;
+
+        habitsDbRef.child(this.state.userId + '/habitsCounter').once('value', snapshot => {
+
+            snapshot.val()
+                ? (this.setState({habitsCounter: snapshot.val()}))
+                : this.createHabitsCounter();
+            // console.log('Base? = ', this.state.habitsCounter);  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        });
 
         habitsDbRef
             .child(this.state.userId + '/' + category)
@@ -112,6 +126,7 @@ export default class Habits extends Component {
     };
 
     render() {
+        let {habitsCounter} = this.state;
         return (
             <HabitContext.Consumer>
                 {({
@@ -120,7 +135,7 @@ export default class Habits extends Component {
                   }) =>
                     isAuth ? (
                         <div className={styles.habit}>
-                            <Sidebar {...this.props} userId={userId} habitsCounter={this.state.habitsCounter}
+                            <Sidebar {...this.props} userId={userId} habitsCounter={habitsCounter}
                                      onCategoryClick={this.onCategoryClick}/>
 
                             <div className={styles.wrapper}>

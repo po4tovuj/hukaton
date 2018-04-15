@@ -1,7 +1,6 @@
 import {habitsDbRef} from './firebase';
 
-export const writeHabitData = (userId,
-                               habit) => {
+export const writeHabitData = (userId, habit) => {
     let habitId = habitsDbRef.child(userId + '/' + habit.category).push().key;
 
     let newHabit = {
@@ -9,12 +8,40 @@ export const writeHabitData = (userId,
         habitId,
     };
 
-    return habitsDbRef.child(userId + '/' + habit.category + '/' + habitId).set(newHabit);
+    return habitsDbRef
+        .child(userId + '/' + habit.category + '/' + habitId)
+        .set(newHabit)
+        .then(() => {
+            habitsDbRef.child(userId + '/habitsCounter').once('value', snapshot => {
+                const counter = snapshot.val();
+                let categoryCount = counter[habit.category];
+                habitsDbRef
+                    .child(userId + '/habitsCounter')
+                    .set({
+                        ...counter,
+                        [habit.category]: ++categoryCount,
+                    });
+            });
+        })
+        .catch(err => console.log(err));
 };
-export const deleteHabitData = (userId, habitId) => {
+
+export const deleteHabitData = (userId, category, habitId) => {
     habitsDbRef
         .child(userId + '/' + habitId)
         .remove()
+        .then(() => {
+            habitsDbRef.child(userId + '/habitsCounter').once('value', snapshot => {
+                const counter = snapshot.val();
+                let categoryCount = counter[category];
+                habitsDbRef
+                    .child(userId + '/habitsCounter')
+                    .set({
+                        ...counter,
+                        [category]: --categoryCount,
+                    });
+            });
+        })
         .catch(err => console.log(err));
 };
 
@@ -29,12 +56,13 @@ export const getDataByCategory = (userId, category) => {
         return snap.val();
     });
 };
-// export const getAllAndJoin = userId =>
-//   habitsDbRef.child(userId).once('value', snap => {
-//     return Object.values(snap.val()).reduce((acc, cur) => {
-//       return { ...acc, ...cur };
-//     }, {});
-//   });
+
+export const getAllAndJoin = userId => habitsDbRef.child(userId).once('value', snap => {
+    return Object.values(snap.val())
+        .reduce((acc, cur) => {
+            return {...acc, ...cur};
+        }, {});
+});
 
 // const habits = {
 //   sport: {
