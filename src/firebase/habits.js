@@ -58,10 +58,8 @@ export const getDataByCategory = (userId, category) => {
 };
 
 export const getAllAndJoin = userId => habitsDbRef.child(userId).once('value', snap => {
-    return Object.values(snap.val())
-        .reduce((acc, cur) => {
-            return {...acc, ...cur};
-        }, {});
+
+   return snap.val();
 });
 
 // const habits = {
@@ -90,11 +88,11 @@ export const getAllAndJoin = userId => habitsDbRef.child(userId).once('value', s
 //     },
 //   },
 // };
-
+//
 // console.log(Object.values(habits));
-
+//
 // const x = Object.values(habits).reduce((acc, cur) => {
 //   return { ...acc, ...cur };
 // }, {});
-
+//
 // console.log(x);

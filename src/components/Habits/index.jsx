@@ -5,7 +5,7 @@ import Sidebar from '../Sidebar';
 import NewHabit from '../NewHabit';
 import CreateHabit from '../CreateHabit';
 import {HabitContext} from '../App';
-import {auth, habitsDbRef} from "../../firebase";
+import {auth, getAllAndJoin, habitsDbRef} from "../../firebase";
 import styles from './styles.css';
 
 const INITIAL_STATE = {
@@ -125,6 +125,25 @@ export default class Habits extends Component {
         });
     };
 
+    onGetAllClick = () => {
+        getAllAndJoin(this.state.userId)
+            .then(result => {
+                    let {habitsCounter: _, ...rest} = result.val();
+                    let arr = [];
+                    let today = new Date();
+
+                    Object.values(rest).forEach(elem => {
+                        arr = arr.concat(Object.values(elem));
+                    });
+
+                    let filteredHabitsList = arr.filter(habit => habit.startDate <= today.setHours(0, 0, 0, 0) && habit.duration[today.getDay()]);
+                    this.setState({
+                        habitsList: filteredHabitsList,
+                    })
+                }
+            )
+    };
+
     render() {
         let {habitsCounter} = this.state;
         return (
@@ -136,7 +155,7 @@ export default class Habits extends Component {
                     isAuth ? (
                         <div className={styles.habit}>
                             <Sidebar {...this.props} userId={userId} habitsCounter={habitsCounter}
-                                     onCategoryClick={this.onCategoryClick}/>
+                                     onCategoryClick={this.onCategoryClick} onGetAllClick={this.onGetAllClick}/>
 
                             <div className={styles.wrapper}>
                                 <NewHabit handleOpenModal={this.handleOpenModal}/>

@@ -37,34 +37,39 @@ const categories = [
     },
 ];
 
-const Sidebar = ({userId, match, habitsCounter, onCategoryClick}) => ({
+const Sidebar = ({userId, match, habitsCounter, onCategoryClick, onGetAllClick}) => ({
     render() {
-        // console.log('habitsCounter => ', habitsCounter); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return (
             <section className={styles.sidebar}>
                 <h2 className={styles.title}>Привычки</h2>
                 <ul className={styles.category__wrapper}>
-                    {categories.map(c => (
+                    {categories.map(category => (
                         <li
-                            key={c.name}
+                            key={category.name}
                             className={styles.category__item}
-                            onClick={()=> onCategoryClick(c.name)}
+                            onClick={()=> onCategoryClick(category.name)}
                         >
                             {/* FIXME: заменить ID на query string
                 https://www.npmjs.com/package/query-string*/}
                             <NavLink
                                 to={{
-                                    pathname: `${match.url}/${c.name}`,
-                                    // search: `?category=${c.name}`,
+                                    pathname: `${match.url}`,
+                                    search: `?category=${category.name}`,
                                 }}>
-                                # {c.text}
+                                # {category.text}
                             </NavLink>
-                            <span className={styles.counter}>{habitsCounter[c.name]}</span>
+                            <span className={styles.counter}>{habitsCounter[category.name]}</span>
                         </li>
                     ))}
                 </ul>
-                <p className={styles.title}>Сегодня</p>
+                <NavLink
+                    to={{
+                        pathname: `${match.url}`,
+                        search: `?category=all&today=true`,
+                    }}>
+                    <p className={styles.title} onClick={onGetAllClick}>Сегодня</p>
+                </NavLink>
             </section>
         );
     },
