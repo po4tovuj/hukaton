@@ -5,6 +5,7 @@ import SignInPage from '../SignIn';
 import Home from '../Home';
 import Header from '../Header';
 import * as routes from '../../constants/routes';
+import PrivateRoute from '../PrivateRoute/index';
 import {
   deleteHabitData,
   initAuthStateListener,
@@ -68,8 +69,8 @@ class App extends React.Component {
   onSignOut = () => {
     doSignOut().then(() => {
       console.log('doSignOut then');
-      this.setState({ ...INITIAL_STATE }, () =>
-        this.props.history.push(routes.SIGN_IN),
+      this.setState({ ...INITIAL_STATE },// () =>
+        // this.props.history.push(routes.SIGN_IN),
       );
     });
   };
@@ -182,6 +183,7 @@ class App extends React.Component {
     // FIXME: Вынести все что связано с Habits на страницу Home.
     // Сделать Home умным и хранить стейт там.
     const { isAuth } = this.state;
+    console.log('isAuth: ', isAuth);
 
     return (
       <div className="app">
@@ -199,11 +201,13 @@ class App extends React.Component {
           <Header />
 
           <Switch>
-            {!isAuth && (
-              <Route exact path={routes.SIGN_IN} component={SignInPage} />
-            )}
+            {/* {!isAuth && <Route exact path={routes.SIGN_IN} component={SignInPage} />}
             {!isAuth && <Route path={routes.SIGN_UP} component={SignUpPage} />}
-            {isAuth && <Route path={routes.HOME} component={Home} />}
+            {isAuth && <Route path={routes.HOME} component={Home} />} */}
+
+            <PrivateRoute path={routes.SIGN_IN} isAuth={!isAuth} component={SignInPage} redirectTo={routes.HOME} />
+            <PrivateRoute path={routes.SIGN_UP} isAuth={!isAuth} component={SignUpPage} redirectTo={routes.HOME} />
+            <PrivateRoute exact path={routes.HOME} isAuth={isAuth} component={Home} redirectTo={routes.SIGN_IN} />
           </Switch>
         </HabitContext.Provider>
       </div>
