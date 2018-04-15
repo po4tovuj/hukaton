@@ -27,11 +27,14 @@ const DateField = () => {
 
     return (
         <div className={styles.wrapper}>
+            <div className={styles.num}></div>
+            <div className={styles.title}></div>
             <div className={styles.day}>{beforeYesterday}</div>
             <div className={styles.day}>{yesterday}</div>
             <div className={styles.day}>{today}</div>
             <div className={styles.day}>{tomorrow}</div>
             <div className={styles.day}>{afterTomorrow}</div>
+            <div className={styles.basket}></div>
         </div>
     );
 };

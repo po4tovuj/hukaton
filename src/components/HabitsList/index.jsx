@@ -1,16 +1,15 @@
 import React from 'react';
 import { HabitContext } from '../App';
 import Habit from '../Habit';
-import { deleteHabitData } from '../../firebase';
 import DateField from '../DateField';
+import { deleteHabitData } from '../../firebase';
+import style from './styles.css';
 
-const HabitsList = props => {
-  console.log(props);
-
+const HabitsList = ({ habitsList }) => {
   return (
     <HabitContext.Consumer>
-      {({ userId, habitsList }) => (
-        <div>
+      {({ userId }) => (
+        <div className={style.wrapper}>
           <DateField />
           {habitsList &&
             Object.values(habitsList).map((habitObj, index) => (

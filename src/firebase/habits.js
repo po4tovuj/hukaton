@@ -1,21 +1,47 @@
 import {habitsDbRef} from './firebase';
 
-export const writeHabitData = (userId,
-                               habit) => {
+export const writeHabitData = (userId, habit) => {
     let habitId = habitsDbRef.child(userId + '/' + habit.category).push().key;
 
     let newHabit = {
         ...habit,
         habitId,
-        // habitsDone: {"0904": true},
     };
 
-    return habitsDbRef.child(userId + '/' + habit.category + '/' + habitId).set(newHabit);
+    return habitsDbRef
+        .child(userId + '/' + habit.category + '/' + habitId)
+        .set(newHabit)
+        .then(() => {
+            habitsDbRef.child(userId + '/habitsCounter').once('value', snapshot => {
+                const counter = snapshot.val();
+                let categoryCount = counter[habit.category];
+                habitsDbRef
+                    .child(userId + '/habitsCounter')
+                    .set({
+                        ...counter,
+                        [habit.category]: ++categoryCount,
+                    });
+            });
+        })
+        .catch(err => console.log(err));
 };
-export const deleteHabitData = (userId, habitId) => {
+
+export const deleteHabitData = (userId, category, habitId) => {
     habitsDbRef
         .child(userId + '/' + habitId)
         .remove()
+        .then(() => {
+            habitsDbRef.child(userId + '/habitsCounter').once('value', snapshot => {
+                const counter = snapshot.val();
+                let categoryCount = counter[category];
+                habitsDbRef
+                    .child(userId + '/habitsCounter')
+                    .set({
+                        ...counter,
+                        [category]: --categoryCount,
+                    });
+            });
+        })
         .catch(err => console.log(err));
 };
 
@@ -25,16 +51,16 @@ export const updateHabitData = (userId, category, habitId, updatedData) => {
 
 export const getDataByCategory = (userId, category) => {
     habitsDbRef.child(userId + '/' + category).once('value', snap => {
-        // console.log('category => ', category, ' => ', snap.val());
+        console.log('answer in firebase => ', snap.val());
+
         return snap.val();
     });
 };
-// export const getAllAndJoin = userId =>
-//   habitsDbRef.child(userId).once('value', snap => {
-//     return Object.values(snap.val()).reduce((acc, cur) => {
-//       return { ...acc, ...cur };
-//     }, {});
-//   });
+
+export const getAllAndJoin = userId => habitsDbRef.child(userId).once('value', snap => {
+
+   return snap.val();
+});
 
 // const habits = {
 //   sport: {
@@ -62,11 +88,11 @@ export const getDataByCategory = (userId, category) => {
 //     },
 //   },
 // };
-
+//
 // console.log(Object.values(habits));
-
+//
 // const x = Object.values(habits).reduce((acc, cur) => {
 //   return { ...acc, ...cur };
 // }, {});
-
+//
 // console.log(x);

@@ -1,81 +1,98 @@
-import React from 'react';
-import styles from './styles.css';
+import React, {Component} from 'react';
 import {calcDay} from '../DateField';
-import {auth} from "../../firebase";
-import {habitsDbRef} from "../../firebase/firebase";
+import {auth, habitsDbRef} from "../../firebase";
+import styles from './styles.css';
 
-const Habit = (props) => {
+export default class Habit extends Component {
 
-    const {index, id, habitObj, onDelete } = props;
-    const { habitId, title, category, duration, habitsDone, startDate } = habitObj;
-
-    let day = new Date();
-    let today_1 = calcDay(day, -1);
-    let today_2 = calcDay(day, -2);
-    let today__1 = calcDay(day, +1);
-    let today__2 = calcDay(day, +2);
-
-    const handleClick = (evt) => {
-        let currentClass;
-        if (evt.target.classList[1].slice(0, 18) === "styles__sign__todo") {
-            let update = {
-                ...habitsDone,
-                [day.setHours(0,0,0,0)] : true,
-            };
-            habitsDbRef.child(auth.currentUser.uid + '/' + category + '/' + habitId + '/habitsDone').set(update);
-            currentClass = evt.target.classList[1];
-            evt.target.classList.remove(currentClass);
-            evt.target.classList.add(styles.sign__done);
-        } else if (evt.target.classList[1] === "styles__sign__done" || evt.target.classList[1].slice(0, 18) === "styles__sign__done") {
-            let unUpdate = {
-                ...habitsDone,
-                [day.setHours(0,0,0,0)] : false,
-            };
-            habitsDbRef.child(auth.currentUser.uid + '/' + category + '/' + habitId + '/habitsDone').set(unUpdate);
-            currentClass = evt.target.classList[1];
-            evt.target.classList.remove(currentClass);
-            evt.target.classList.add(styles.sign__todo);
-        }
+    state = {
+        habitWasDone: false,
     };
 
-    const handleBasketClick = (evt) => {
-        evt.target.classList.toggle(styles.basket__orange);
-        onDelete(auth.currentUser.uid, category + '/' + evt.target.id);
+    componentDidMount() {
+        let today = new Date().setHours(0, 0, 0, 0);
+        let habitsDone = this.props.habitObj.habitsDone;
+
+        habitsDone && this.setState({
+            habitWasDone: habitsDone[today],
+        });
+    }
+
+    render() {
+        const {index, id, habitObj, onDelete} = this.props;
+        const {habitId, title, category, duration, habitsDone, startDate} = habitObj;
+
+        let today = new Date();
+        let yesterday = calcDay(today, -1);
+        let beforeYesterday = calcDay(today, -2);
+        let tomorrow = calcDay(today, +1);
+        let afterTomorrow = calcDay(today, +2);
+
+
+        const handleClick = () => {
+            if (duration && duration[today.getDay()]) {
+                habitsDbRef.child(auth.currentUser.uid + '/' + category + '/' + habitId + '/habitsDone')
+                    .set({
+                        ...habitsDone,
+                        [today.setHours(0, 0, 0, 0)]: !this.state.habitWasDone,
+                    })
+                    .then(() => {
+                        this.setState(prevState => {
+                            return {
+                                habitWasDone: !prevState.habitWasDone,
+                            }
+                        });
+                    });
+            }
+        };
+
+        const handleBasketClick = (evt) => {
+            evt.target.classList.toggle(styles.basket__orange);
+            onDelete(auth.currentUser.uid, category, category + '/' + evt.target.id);
+        };
+
+        const handleIconStyle = (checkedDate) => {
+            let iconStyle = [];
+            iconStyle = [...iconStyle, styles.sign];
+
+            let habitShouldDo = startDate <= Date.parse(checkedDate) && duration && duration[checkedDate.getDay()]
+                ? true
+                : false;
+
+            let habitWasMade = habitsDone && habitsDone[checkedDate.setHours(0, 0, 0, 0)];
+
+            if (habitShouldDo) {
+                if (checkedDate < today.setHours(0, 0, 0, 0)) {
+                    iconStyle = habitShouldDo && habitWasMade
+                        ? [...iconStyle, styles.sign__done]
+                        : [...iconStyle, styles.sign__not_done]
+                } else {
+                    if (checkedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+                        iconStyle = this.state.habitWasDone
+                            ? [...iconStyle, styles.sign__done]
+                            : [...iconStyle, styles.sign__todo];
+                    } else {
+                        iconStyle = [...iconStyle, styles.sign__todo];
+                    }
+                }
+            } else {
+                iconStyle = [...iconStyle, styles.sign__none];
+            }
+
+            return iconStyle.join(' ');
+        };
+
+        return (
+            <div className={styles.wrapper}>
+                <div className={styles.number}> {index + 1} </div>
+                <div className={styles.title}>{title}</div>
+                <div className={handleIconStyle(beforeYesterday)}></div>
+                <div className={handleIconStyle(yesterday)}></div>
+                <div className={handleIconStyle(today)} onClick={handleClick}></div>
+                <div className={handleIconStyle(tomorrow)}></div>
+                <div className={handleIconStyle(afterTomorrow)}></div>
+                <div className={styles.basket} id={id} onClick={handleBasketClick}></div>
+            </div>
+        );
     };
-
-    const handleIconStyle = (checked) => {
-        let style = [styles.sign];
-
-        startDate <= Date.parse(checked) && duration && duration[checked.getDay()]
-            ? style = [...style, styles.sign__todo]
-            : style = [...style, styles.sign__none];
-
-        let index = style.includes(styles.sign__todo);
-
-        let habitWasMade = habitsDone && habitsDone[checked.setHours(0,0,0,0)];
-
-        if (checked < day && index > 0 && habitWasMade) {
-            style = style.slice(0, 1);
-            style = [...style, styles.sign__done];
-        } else if (checked < day && index > 0) {
-            style = style.slice(0, 1);
-            style = [...style, styles.sign__not_done];
-        }
-        return style.join(' ');
-    };
-
-    return (
-        <div className={styles.wrapper}>
-            <div className={styles.number}> {index + 1} </div>
-            <div className={styles.title}>{title}</div>
-            <div className={handleIconStyle(today_2)}></div>
-            <div className={handleIconStyle(today_1)}></div>
-            <div className={handleIconStyle(day)} onClick={handleClick}></div>
-            <div className={handleIconStyle(today__1)}></div>
-            <div className={handleIconStyle(today__2)}></div>
-            <div className={styles.basket} id={id} onClick={handleBasketClick}></div>
-        </div>
-    );
-};
-
-export default Habit;
+}

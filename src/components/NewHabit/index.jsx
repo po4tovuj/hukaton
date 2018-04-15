@@ -12,18 +12,18 @@ export default class NewHabits extends Component {
         this.setState({
             inputValue: value
         })
-    }
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.handleOpenModal();
-    }
+    };
 
     handleClick = (event) => {
         event.preventDefault();
         console.log("Click!!");
         this.props.handleOpenModal();
-    }
+    };
 
     render() {
         return (

@@ -2,27 +2,29 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 30px;
+    min-height: 30px;
     line-height: 30px;
     color: #757575;
 }
 
 .number {
-    width: 5%;
+    flex: 0 0 30px;
     text-align: right;
 }
 
 .title {
+    box-sizing: border-box;
     width: 40%;
-    padding-left: 20px;
+    padding-left: 5px;
+    word-wrap: break-word;
 }
 
 .sign {
-    width: 8%;
+    flex: 0 0 82px;
 }
 
 .sign:nth-child(5){
-    background-color: #f3f4fb;
+    background-color: #efefff; /*#f3f4fb*/
 }
 
 .sign__todo {
@@ -46,13 +48,12 @@
 }
 
 .basket {
-    width: 10%;
+    flex: 0 0 82px;
     background: url('../../images/icon-13.svg') no-repeat 50% 50%;
-    background-size: 20px;
+    background-size: 15px;
 }
 
 .basket__orange {
-    width: 10%;
     background: url('../../images/icon-13_orange.svg') no-repeat 50% 50%;
-    background-size: 20px;
+    background-size: 15px;
 }
