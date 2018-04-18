@@ -1,98 +1,143 @@
-import React, {Component} from 'react';
-import {calcDay} from '../DateField';
-import {auth, habitsDbRef} from "../../firebase";
+import React, { Component } from 'react';
+import { calcDay } from '../DateField';
+import { auth, habitsDbRef } from '../../firebase';
 import styles from './styles.css';
 
+const BasketBtn = ({ cls, onClick, id }) => (
+  <button className={cls} onClick={onClick}>
+    x
+  </button>
+);
+
 export default class Habit extends Component {
+  state = {
+    habitWasDone: false,
+    date: {
+      today: new Date(),
+      yesterday: calcDay(new Date(), -1),
+      beforeYesterday: calcDay(new Date(), -2),
+      tomorrow: calcDay(new Date(), +1),
+      afterTomorrow: calcDay(new Date(), +2),
+    },
+  };
 
-    state = {
-        habitWasDone: false,
-    };
+  componentDidMount() {
+    const { date } = this.state;
 
-    componentDidMount() {
-        let today = new Date().setHours(0, 0, 0, 0);
-        let habitsDone = this.props.habitObj.habitsDone;
+    date.today.setHours(0, 0, 0, 0);
+    let habitsDone = this.props.habitObj.habitsDone;
 
-        habitsDone && this.setState({
-            habitWasDone: habitsDone[today],
+    if (habitsDone) {
+      this.setState({
+        habitWasDone: habitsDone[date.today],
+      });
+    }
+  }
+
+  handleBasketClick = evt => {
+    const target = evt.target;
+    const { id } = this.props;
+    const {
+      onDelete,
+      habitObj: { category },
+    } = this.props;
+
+    onDelete(auth.currentUser.uid, category, category + '/' + id);
+  };
+
+  handleClick = () => {
+    const {
+      habitObj: { habitId, category, duration, habitsDone },
+    } = this.props;
+
+    const { date, habitWasDone } = this.state;
+
+    if (duration && duration[date.today.getDay()]) {
+      habitsDbRef
+        .child(`${auth.currentUser.uid}/${category}/${habitId}/habitsDone`)
+        .set({
+          ...habitsDone,
+          [date.today.setHours(0, 0, 0, 0)]: !habitWasDone,
+        })
+        .then(() => {
+          this.setState(prevState => ({
+            habitWasDone: !prevState.habitWasDone,
+          }));
         });
     }
+  };
 
-    render() {
-        const {index, id, habitObj, onDelete} = this.props;
-        const {habitId, title, category, duration, habitsDone, startDate} = habitObj;
+  handleIconStyle = checkedDate => {
+    const {
+      habitObj: { duration, habitsDone, startDate },
+    } = this.props;
 
-        let today = new Date();
-        let yesterday = calcDay(today, -1);
-        let beforeYesterday = calcDay(today, -2);
-        let tomorrow = calcDay(today, +1);
-        let afterTomorrow = calcDay(today, +2);
+    const { date } = this.state;
 
+    let iconStyle = [styles.sign];
 
-        const handleClick = () => {
-            if (duration && duration[today.getDay()]) {
-                habitsDbRef.child(auth.currentUser.uid + '/' + category + '/' + habitId + '/habitsDone')
-                    .set({
-                        ...habitsDone,
-                        [today.setHours(0, 0, 0, 0)]: !this.state.habitWasDone,
-                    })
-                    .then(() => {
-                        this.setState(prevState => {
-                            return {
-                                habitWasDone: !prevState.habitWasDone,
-                            }
-                        });
-                    });
-            }
-        };
+    let habitShouldDo =
+      startDate <= Date.parse(checkedDate) &&
+      duration &&
+      duration[checkedDate.getDay()];
 
-        const handleBasketClick = (evt) => {
-            evt.target.classList.toggle(styles.basket__orange);
-            onDelete(auth.currentUser.uid, category, category + '/' + evt.target.id);
-        };
+    let habitWasMade =
+      habitsDone && habitsDone[checkedDate.setHours(0, 0, 0, 0)];
 
-        const handleIconStyle = (checkedDate) => {
-            let iconStyle = [];
-            iconStyle = [...iconStyle, styles.sign];
+    if (habitShouldDo) {
+      if (checkedDate < date.today.setHours(0, 0, 0, 0)) {
+        iconStyle =
+          habitShouldDo && habitWasMade
+            ? [...iconStyle, styles.sign__done]
+            : [...iconStyle, styles.sign__not_done];
+      } else {
+        if (
+          checkedDate.setHours(0, 0, 0, 0) === date.today.setHours(0, 0, 0, 0)
+        ) {
+          iconStyle = this.state.habitWasDone
+            ? [...iconStyle, styles.sign__done]
+            : [...iconStyle, styles.sign__todo];
+        } else {
+          iconStyle = [...iconStyle, styles.sign__todo];
+        }
+      }
+    } else {
+      iconStyle = [...iconStyle, styles.sign__none];
+    }
 
-            let habitShouldDo = startDate <= Date.parse(checkedDate) && duration && duration[checkedDate.getDay()]
-                ? true
-                : false;
+    return iconStyle.join(' ');
+  };
 
-            let habitWasMade = habitsDone && habitsDone[checkedDate.setHours(0, 0, 0, 0)];
+  render() {
+    const {
+      index,
+      id,
+      habitObj: { title },
+    } = this.props;
 
-            if (habitShouldDo) {
-                if (checkedDate < today.setHours(0, 0, 0, 0)) {
-                    iconStyle = habitShouldDo && habitWasMade
-                        ? [...iconStyle, styles.sign__done]
-                        : [...iconStyle, styles.sign__not_done]
-                } else {
-                    if (checkedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
-                        iconStyle = this.state.habitWasDone
-                            ? [...iconStyle, styles.sign__done]
-                            : [...iconStyle, styles.sign__todo];
-                    } else {
-                        iconStyle = [...iconStyle, styles.sign__todo];
-                    }
-                }
-            } else {
-                iconStyle = [...iconStyle, styles.sign__none];
-            }
+    const {
+      date: { today, beforeYesterday, yesterday, tomorrow, afterTomorrow },
+    } = this.state;
 
-            return iconStyle.join(' ');
-        };
-
-        return (
-            <div className={styles.wrapper}>
-                <div className={styles.number}> {index + 1} </div>
-                <div className={styles.title}>{title}</div>
-                <div className={handleIconStyle(beforeYesterday)}></div>
-                <div className={handleIconStyle(yesterday)}></div>
-                <div className={handleIconStyle(today)} onClick={handleClick}></div>
-                <div className={handleIconStyle(tomorrow)}></div>
-                <div className={handleIconStyle(afterTomorrow)}></div>
-                <div className={styles.basket} id={id} onClick={handleBasketClick}></div>
-            </div>
-        );
-    };
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.number}>{index + 1}</div>
+        <div className={styles.title}>{title}</div>
+        <div className={this.handleIconStyle(beforeYesterday)} />
+        <div className={this.handleIconStyle(yesterday)} />
+        <div
+          className={this.handleIconStyle(today)}
+          onClick={this.handleClick}
+        />
+        <div className={this.handleIconStyle(tomorrow)} />
+        <div className={this.handleIconStyle(afterTomorrow)} />
+        <BasketBtn cls={styles.basket} onClick={this.handleBasketClick} />
+        {/* <div
+          className={styles.basket}
+          id={id}
+          onClick={this.handleBasketClick}
+        /> */}
+      </div>
+    );
+  }
 }

@@ -6,26 +6,21 @@ import Habits from '../Habits';
 import Header from '../Header';
 import * as routes from '../../constants/routes';
 import PrivateRoute from '../PrivateRoute/index';
-import {
-  initAuthStateListener,
-  doSignOut,
-} from '../../firebase';
+import { initAuthStateListener, doSignOut } from '../../firebase';
 import './index.css';
 
 export const HabitContext = React.createContext();
 
 const INITIAL_STATE = {
-    email: '',
-    displayName: '',
-    isLoading: false,
-    userId: null,
-    isAuth: false,
+  email: '',
+  displayName: '',
+  isLoading: false,
+  userId: null,
+  isAuth: false,
 };
 
 class App extends React.Component {
-  state = {
-      ...INITIAL_STATE,
-  };
+  state = { ...INITIAL_STATE };
 
   componentDidMount() {
     initAuthStateListener(this.onSignIn, this.onSignOut);
@@ -42,18 +37,11 @@ class App extends React.Component {
   };
 
   onSignOut = () => {
-    doSignOut().then(() => {
-      console.log('doSignOut then');
-      this.setState({ ...INITIAL_STATE }//, () =>
-        //this.props.history.push(routes.SIGN_IN),
-      );
-    });
+    doSignOut().then(() => this.setState({ ...INITIAL_STATE }));
   };
-
 
   render() {
     const { isAuth } = this.state;
-    console.log('isAuth app: ', isAuth);
 
     return (
       <div className="app">
@@ -65,13 +53,25 @@ class App extends React.Component {
           <Header />
 
           <Switch>
-            {/* {!isAuth && <Route exact path={routes.SIGN_IN} component={SignInPage} />}
-            {!isAuth && <Route path={routes.SIGN_UP} component={SignUpPage} />}
-            {isAuth && <Route path={routes.HOME} component={Habits} />} */}
-
-            <PrivateRoute exact path={routes.SIGN_IN} isAuth={!isAuth} component={SignInPage} redirectTo={routes.HOME} />
-            <PrivateRoute path={routes.SIGN_UP} isAuth={!isAuth} component={SignUpPage} redirectTo={routes.HOME} />
-            <PrivateRoute path={routes.HOME} isAuth={isAuth} component={Habits} redirectTo={routes.SIGN_IN} />
+            <PrivateRoute
+              exact
+              path={routes.SIGN_IN}
+              isAuth={!isAuth}
+              component={SignInPage}
+              redirectTo={routes.HOME}
+            />
+            <PrivateRoute
+              path={routes.SIGN_UP}
+              isAuth={!isAuth}
+              component={SignUpPage}
+              redirectTo={routes.HOME}
+            />
+            <PrivateRoute
+              path={routes.HOME}
+              isAuth={isAuth}
+              component={Habits}
+              redirectTo={routes.SIGN_IN}
+            />
           </Switch>
         </HabitContext.Provider>
       </div>
