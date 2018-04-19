@@ -34,12 +34,15 @@ export const deleteHabitData = (userId, category, habitId) => {
             habitsDbRef.child(userId + '/habitsCounter').once('value', snapshot => {
                 const counter = snapshot.val();
                 let categoryCount = counter[category];
-                habitsDbRef
-                    .child(userId + '/habitsCounter')
-                    .set({
-                        ...counter,
-                        [category]: --categoryCount,
-                    });
+
+                if (categoryCount > 0) {
+                    habitsDbRef
+                        .child(userId + '/habitsCounter')
+                        .set({
+                            ...counter,
+                            [category]: --categoryCount,
+                        });
+                }
             });
         })
         .catch(err => console.log(err));
@@ -59,40 +62,5 @@ export const getDataByCategory = (userId, category) => {
 
 export const getAllAndJoin = userId => habitsDbRef.child(userId).once('value', snap => {
 
-   return snap.val();
+    return snap.val();
 });
-
-// const habits = {
-//   sport: {
-//     '00': {
-//       hab: 1,
-//     },
-//     '01': {
-//       hab: 2,
-//     },
-//   },
-//   life: {
-//     '02': {
-//       hab: 3,
-//     },
-//     '03': {
-//       hab: 4,
-//     },
-//   },
-//   health: {
-//     '04': {
-//       hab: 5,
-//     },
-//     '05': {
-//       hab: 6,
-//     },
-//   },
-// };
-//
-// console.log(Object.values(habits));
-//
-// const x = Object.values(habits).reduce((acc, cur) => {
-//   return { ...acc, ...cur };
-// }, {});
-//
-// console.log(x);

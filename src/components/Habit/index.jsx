@@ -5,7 +5,6 @@ import styles from './styles.css';
 
 const BasketBtn = ({ cls, onClick, id }) => (
   <button className={cls} onClick={onClick}>
-    x
   </button>
 );
 

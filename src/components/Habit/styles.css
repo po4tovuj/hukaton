@@ -51,9 +51,10 @@
     flex: 0 0 82px;
     background: url('../../images/icon-13.svg') no-repeat 50% 50%;
     background-size: 15px;
+    border: none;
 }
 
-.basket__orange {
+.basket:hover {
     background: url('../../images/icon-13_orange.svg') no-repeat 50% 50%;
     background-size: 15px;
 }
