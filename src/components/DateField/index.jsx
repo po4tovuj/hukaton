@@ -1,4 +1,5 @@
 import React from 'react';
+import NewHabit from '../NewHabit';
 import styles from './styles.css';
 
 export const normalizeDate = (date) => {
@@ -16,7 +17,7 @@ export const calcDay = (currentDay, offset) => {
     return calculatedDay;
 };
 
-const DateField = () => {
+const DateField = ({ handleOpenModal }) => {
 
     let day = new Date();
     let today = normalizeDate(day);
@@ -28,7 +29,13 @@ const DateField = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.num}></div>
-            <div className={styles.title}></div>
+            <div className={styles.add_habit__container}>
+                <button className={styles.add_habit} onClick={handleOpenModal}>
+                    Добавить привычку
+                {/* <NewHabit handleOpenModal={handleOpenModal}/> */}
+                    {/* <button handleOpenModal={handleOpenModal}> Добавить привычку </button> */}
+                </button>
+            </div>
             <div className={styles.dates_wrapper}>
                 <div className={styles.day}>{beforeYesterday}</div>
                 <div className={styles.day}>{yesterday}</div>

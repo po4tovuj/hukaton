@@ -27,12 +27,15 @@ export default class NewHabits extends Component {
 
     render() {
         return (
-            <div className={styles.NewHabits}>
-                <form className={styles.form} onSubmit={this.handleSubmit}>
-                    <button className={styles.buttonAdd} onClick={this.handleClick}>+</button>
-                    <input type="text" className={styles.inputText} placeholder="Добавить привычку" onChange={this.handleInputValue} />
-                </form>
-            </div>
+            <button onClick={ this.handleClick } >
+                <span className={styles.buttonAdd}>+</span> Добавить привычку
+            </button >
         );
     }
 }
+
+// <div className={styles.NewHabits}>
+{/* <form className={styles.form} onSubmit={this.handleSubmit}> */ }
+{/* <input type="text" className={styles.inputText} placeholder="Добавить привычку" onChange={this.handleInputValue} /> */ }
+{/* </form> */ }
+{/* </div> */ }

@@ -21,10 +21,10 @@
     border: 1px solid gray;
 }
 .buttonAdd{
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     color: white;
     width: 20px;
     height: 20px;

@@ -91,7 +91,7 @@ export default class Habits extends Component {
             [snapshot.key]: snapshot.val(),
           },
         })),
-      );
+    );
   };
 
   initChildRemovedListener = () => {
@@ -160,14 +160,19 @@ export default class Habits extends Component {
                 onGetAllClick={this.onGetAllClick}
               />
               <div className={styles.wrapper}>
-                <NewHabit handleOpenModal={this.handleOpenModal} />
+                {/* <NewHabit handleOpenModal={this.handleOpenModal} /> */}
                 {userId && <Route path={`${this.props.match.url}/:category`} />}
                 <CreateHabit
                   handleCloseModal={this.handleCloseModal}
                   showModal={this.state.showModal}
                   onCategoryClick={this.onCategoryClick}
                 />
-                {userId && <HabitsList habitsList={this.state.habitsList} />}
+                {userId &&
+                  <HabitsList
+                    habitsList={this.state.habitsList}
+                    handleOpenModal={this.handleOpenModal}
+                  />
+                }
               </div>
             </div>
           ) : null

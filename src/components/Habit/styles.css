@@ -7,7 +7,7 @@
     color: #757575;
 }
 
-.wrapper:nth-child(2n) {
+.wrapper:nth-child(2n+1) {
     background-color: #f8f8f8;
 }
 
@@ -17,21 +17,18 @@
 }
 
 .number {
-    /* flex: 0 0 30px; */
     flex-basis: 3%;
-    text-align: right;
+    text-align: center;
 }
 
 .title {
     box-sizing: border-box;
     flex-basis: 37%;
-    /* width: 40%; */
     padding-left: 10px;
     word-wrap: break-word;
 }
 
 .sign {
-    /* flex: 0 0 82px; */
     flex-basis: calc(100% / 6);
 }
 
@@ -60,7 +57,6 @@
 }
 
 .basket {
-    /* flex: 0 0 82px; */
     flex-basis: calc(100% / 6);
     background: url('../../images/icon-13.svg') no-repeat 50% 50%;
     background-size: 15px;

@@ -5,12 +5,12 @@ import DateField from '../DateField';
 import { deleteHabitData } from '../../firebase';
 import style from './styles.css';
 
-const HabitsList = ({ habitsList }) => {
+const HabitsList = ({ habitsList, handleOpenModal }) => {
   return (
     <HabitContext.Consumer>
       {({ userId }) => (
         <div className={style.wrapper}>
-          <DateField />
+          <DateField handleOpenModal={handleOpenModal} />
           {habitsList &&
             Object.values(habitsList).map((habitObj, index) => (
               <Habit
