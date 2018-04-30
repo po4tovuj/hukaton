@@ -122,15 +122,17 @@ export default class Habit extends Component {
       <div className={styles.wrapper}>
         <div className={styles.number}>{index + 1}</div>
         <div className={styles.title}>{title}</div>
-        <div className={this.handleIconStyle(beforeYesterday)} />
-        <div className={this.handleIconStyle(yesterday)} />
-        <div
-          className={this.handleIconStyle(today)}
-          onClick={this.handleClick}
-        />
-        <div className={this.handleIconStyle(tomorrow)} />
-        <div className={this.handleIconStyle(afterTomorrow)} />
-        <BasketBtn cls={styles.basket} onClick={this.handleBasketClick} />
+        <div className={styles.icon_wrapper}>
+          <div className={this.handleIconStyle(beforeYesterday)} />
+          <div className={this.handleIconStyle(yesterday)} />
+          <div
+            className={this.handleIconStyle(today)}
+            onClick={this.handleClick}
+          />
+          <div className={this.handleIconStyle(tomorrow)} />
+          <div className={this.handleIconStyle(afterTomorrow)} />
+          <BasketBtn cls={styles.basket} onClick={this.handleBasketClick} />
+        </div>
         {/* <div
           className={styles.basket}
           id={id}

@@ -7,23 +7,33 @@
     color: #757575;
 }
 
+.dates_wrapper {
+    display: flex;
+    justify-content: flex-end;
+    flex-basis: 60%;
+}
+
 .num{
-    flex: 0 0 30px;
+    /* flex: 0 0 30px; */
+    flex-basis: 3%;
 }
 
 .title{
-    width: 40%;
+    /* width: 40%; */
+    flex-basis: 37%;
 }
 
 .day {
-    flex: 0 0 82px;
+    /* flex: 0 0 82px; */
+    flex-basis: calc(100% / 6);
     text-align: center;
 }
 
-.day:nth-child(5){
+.day:nth-child(3){
     background-color: #efefff; /*#f3f4fb*/
 }
 
 .basket{
-    flex: 0 0 82px;
+    /* flex: 0 0 82px; */
+    flex-basis: calc(100% / 6);
 }

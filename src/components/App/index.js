@@ -55,6 +55,12 @@ class App extends React.Component {
           <Switch>
             <PrivateRoute
               exact
+              path={routes.HOME}
+              isAuth={isAuth}
+              component={Habits}
+              redirectTo={routes.SIGN_IN}
+            />
+            <PrivateRoute
               path={routes.SIGN_IN}
               isAuth={!isAuth}
               component={SignInPage}
@@ -65,12 +71,6 @@ class App extends React.Component {
               isAuth={!isAuth}
               component={SignUpPage}
               redirectTo={routes.HOME}
-            />
-            <PrivateRoute
-              path={routes.HOME}
-              isAuth={isAuth}
-              component={Habits}
-              redirectTo={routes.SIGN_IN}
             />
           </Switch>
         </HabitContext.Provider>

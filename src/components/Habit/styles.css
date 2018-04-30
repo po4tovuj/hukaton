@@ -2,28 +2,40 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    min-height: 30px;
-    line-height: 30px;
+    min-height: 40px;
+    line-height: 40px;
     color: #757575;
 }
 
+.wrapper:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+
+.icon_wrapper {
+    display: flex;
+    flex-basis: 60%;
+}
+
 .number {
-    flex: 0 0 30px;
+    /* flex: 0 0 30px; */
+    flex-basis: 3%;
     text-align: right;
 }
 
 .title {
     box-sizing: border-box;
-    width: 40%;
-    padding-left: 5px;
+    flex-basis: 37%;
+    /* width: 40%; */
+    padding-left: 10px;
     word-wrap: break-word;
 }
 
 .sign {
-    flex: 0 0 82px;
+    /* flex: 0 0 82px; */
+    flex-basis: calc(100% / 6);
 }
 
-.sign:nth-child(5){
+.sign:nth-child(3){
     background-color: #efefff; /*#f3f4fb*/
 }
 
@@ -48,7 +60,8 @@
 }
 
 .basket {
-    flex: 0 0 82px;
+    /* flex: 0 0 82px; */
+    flex-basis: calc(100% / 6);
     background: url('../../images/icon-13.svg') no-repeat 50% 50%;
     background-size: 15px;
     border: none;
