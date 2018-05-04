@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 
 import { SignUpLink } from '../SignUp';
 import { doSignInWithEmailAndPassword } from '../../firebase';
-import * as routes from '../../constants/routes';
 import styles from './styles.css';
 
 const SignInPage = ({ history }) => (
@@ -32,11 +31,8 @@ class SignInForm extends Component {
     event.preventDefault();
     const { email, password } = this.state;
 
-    const { history } = this.props;
 
-    doSignInWithEmailAndPassword(email, password)//.then(() =>
-      // history.push(routes.HOME),
-    // );
+    doSignInWithEmailAndPassword(email, password)
   };
 
   render() {

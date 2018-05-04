@@ -144,7 +144,6 @@ export default class Habits extends Component {
 
   render() {
     const { habitsCounter } = this.state;
-
     console.log('in Habits.js: ', habitsCounter);
 
     return (

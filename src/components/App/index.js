@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import SignUpPage from '../SignUp';
+import AccountPage from '../Account/index';
 import SignInPage from '../SignIn';
 import Habits from '../Habits';
 import Header from '../Header';
@@ -72,6 +73,12 @@ class App extends React.Component {
               component={Habits}
               redirectTo={routes.SIGN_IN}
             />
+              <PrivateRoute
+                  path={routes.ACCOUNT}
+                  isAuth={isAuth}
+                  component={AccountPage}
+                  redirectTo={routes.SIGN_IN}
+              />
           </Switch>
         </HabitContext.Provider>
       </div>

@@ -1,17 +1,9 @@
-import { auth, usersDbRef } from './firebase';
+import { auth } from './firebase';
 
 // Sign Up
-export const doCreateUserWithEmailAndPassword = (name, email, password) => {
+export const doCreateUserWithEmailAndPassword = (email, password) => {
   return auth
     .createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      const currentUser = {
-        id: user.uid,
-        displayName: name,
-        email: user.email,
-      };
-      usersDbRef.child(currentUser.id).set(currentUser);
-    })
     .catch(error => console.log(error));
 };
 
@@ -37,7 +29,11 @@ export const initAuthStateListener = (onSignIn, onSignOut) => {
     }
   });
 };
-
+export const changeName = (user, name) => {
+  user.updateProfile({
+      displayName: name,
+  }).then(alert('you are chenged your Name')).catch(error => console.log("err ", error.message))
+};
 // Password Reset
 export const doPasswordReset = email => auth.sendPasswordResetEmail(email);
 

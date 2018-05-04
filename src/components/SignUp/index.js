@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { doCreateUserWithEmailAndPassword } from '../../firebase';
 import * as routes from '../../constants/routes';
 import styles from '../SignIn/styles.css';
+import {usersDbRef} from "../../firebase/firebase";
 
 const SignUpPage = ({ history }) => (
   <div>
@@ -20,9 +21,9 @@ const INITIAL_STATE = {
 
 class SignUpForm extends Component {
   constructor(props) {
-    super(props);
+      super(props);
 
-    this.state = { ...INITIAL_STATE };
+      this.state = {...INITIAL_STATE};
   }
 
   handleChange = evt => {
@@ -34,16 +35,32 @@ class SignUpForm extends Component {
   };
 
   onSubmit = event => {
-    event.preventDefault();
-    const { displayName, email, passwordOne } = this.state;
-    const { history } = this.props;
+      event.preventDefault();
+      const {displayName, email, passwordOne} = this.state;
 
-    doCreateUserWithEmailAndPassword(displayName, email, passwordOne).then(() =>
-      history.push(routes.HOME),
-    );
+      doCreateUserWithEmailAndPassword(email, passwordOne).then(authUser => {
+          console.log(authUser);
+          authUser
+              .updateProfile({
+                  displayName: displayName,
+                  id: authUser.uid,
+              }).then(()=> console.log(authUser.id))
+              .catch(error => console.log(error));
+          // Create a user in your own accessible Firebase Database too
+          const user = usersDbRef.child(`${authUser.uid}`);
+          user.set({
+              displayName,
+              email,
+          })
+              .catch(error => {
+                  this.setState({
+                      error: error.message
+                  });
+              });
+
+      });
   };
-
-  render() {
+  render(){
     const { displayName, email, passwordOne, passwordTwo, error } = this.state;
 
     const isInvalid =

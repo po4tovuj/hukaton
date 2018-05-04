@@ -1,0 +1,12 @@
+/*@font-face {*/
+  /*font-family: MuseoSansCyrl_0;*/
+  /*src: local("MuseoSansCyrl_0"),*/
+  /*!*url(../../../fonts/MuseoSansCyrl_1.otf);*!*/
+/*}*/
+
+.title {
+  display: block;
+  color: #ff6d00;
+  /*font-family: MuseoSansCyrl_0, sans-serif;*/
+  font-size: 21px;
+}

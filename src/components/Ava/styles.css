@@ -1,0 +1,39 @@
+
+.user-ava {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 125px;
+  height: 125px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: rgba(100, 100, 100, .4) 4px 4px 8px -2px;
+}
+.circle {
+    width: 30%;
+    height: 30%;
+    margin-bottom: 2px;
+    background-color: #e5e5e5;
+    border-radius: 50%;
+  }
+
+  .semicircle {
+    width: 63%;
+    height: 30%;
+    background-color: #e5e5e5;
+    border-radius: 48px 48px 0 0;
+  }
+  .tooltip {
+    margin: -8px 0 0 56px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 16px;
+    text-align: center;
+    background: #00ff00;
+    border: 2px solid #f00;
+    border-radius: 50%;
+  }
+

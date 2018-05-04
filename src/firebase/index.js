@@ -4,6 +4,7 @@ export {
   doSignInWithEmailAndPassword,
   doSignOut,
   initAuthStateListener,
+    changeName,
   doPasswordReset,
   doPasswordUpdate,
 } from './auth';
