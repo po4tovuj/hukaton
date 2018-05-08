@@ -6,7 +6,7 @@ import App from './components/App';
 
 ReactDOM.render(
   <Router>
-    <Route path="/" component={App} />
+    <Route path="/" basename={process.env.PUBLIC_URL} component={App} />
   </Router>,
   document.getElementById('root'),
 );
